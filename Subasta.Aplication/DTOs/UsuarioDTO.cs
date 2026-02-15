@@ -11,21 +11,20 @@ namespace Subasta.Aplication.DTOs
     {
         public int IdUsuario { get; set; }
 
-        public string CorreoElectronico { get; set; } = string.Empty!;
+        public string CorreoElectronico { get; set; } = string.Empty;
 
-        public string Contrasenna { get; set; } = string.Empty!;
+        public string Contrasenna { get; set; } = string.Empty;
 
-        public string NombreCompleto { get; set; } = string.Empty!;
+        public string NombreCompleto { get; set; } = string.Empty;
 
         public DateTime FechaRegistro { get; set; }
 
         public int IdRol { get; set; }
 
         public int IdEstado { get; set; }
+        public string Rol { get; set; } = string.Empty;
+        public string Estado { get; set; } = string.Empty;
 
-        // public virtual Estado IdEstadoNavigation { get; set; } = null!;
-
-        // public virtual Rol IdRolNavigation { get; set; } = null!;
 
     }
 }

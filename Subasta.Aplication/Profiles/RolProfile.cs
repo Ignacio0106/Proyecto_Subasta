@@ -9,11 +9,11 @@ using Subasta.Infraestructure.Models;
 
 namespace Subasta.Aplication.Profiles
 {
-    public class UsuarioProfile : Profile
+    public class RolProfile : Profile
     {
-        public UsuarioProfile()
+        public RolProfile()
         {
-            CreateMap<Usuario, UsuarioDTO>();
+            CreateMap<Rol, RolDTO>();
             /*CreateMap<Libro, LibroDTO>(); 
              CreateMap<Autor, AutorDTO>() 
                  .ForMember(d => d.Libros, opt => opt.MapFrom(s => s.Libro));*/
