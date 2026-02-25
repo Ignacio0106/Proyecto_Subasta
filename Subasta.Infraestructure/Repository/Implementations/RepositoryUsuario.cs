@@ -18,19 +18,27 @@ namespace Subasta.Infraestructure.Repository.Implementations
         {
             _context = context;
         }
-
-        public Task<Usuario> FindByIdAsync(int id)
+        public async Task<Usuario?> FindByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Usuario
+            .Include(u => u.IdRolNavigation)
+            .Include(u => u.IdEstadoNavigation)
+            .Include(u => u.Subasta)
+                .Include(u => u.Puja)
+
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.IdUsuario == id);
         }
+        
+
 
         public async Task<ICollection<Usuario>> ListAsync()
         {
-            var collection = await _context.Set<Usuario>()
+            return await _context.Usuario
+                .Include(u => u.IdRolNavigation)
+                .Include(u => u.IdEstadoNavigation)
                 .AsNoTracking()
                 .ToListAsync();
-
-            return collection;
         }
 
     }

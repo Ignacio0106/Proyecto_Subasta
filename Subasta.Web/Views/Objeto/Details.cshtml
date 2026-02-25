@@ -1,0 +1,97 @@
+﻿@model Subasta.Aplication.DTOs.ObjetoDTO
+
+@{
+    ViewData["Title"] = "Detalle del Objeto";
+}
+
+<h1>@Model.Nombre</h1>
+
+<div class="row mb-4">
+    <!-- GALERÍA DE IMÁGENES -->
+    <div class="col-md-6">
+        <div id="carouselImagenes" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.Imagenes?.Count; i++)
+                {
+                    var imagen = Model.Imagenes[i];
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="@(imagen != null ? "data:image/png;base64," + Convert.ToBase64String(imagen) : "")" class="d-block w-100" alt="Imagen @i">
+                    </div>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselImagenes" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselImagenes" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- INFORMACIÓN DEL OBJETO -->
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">Descripción:</dt>
+            <dd class="col-sm-8">@Model.Descripcion</dd>
+
+            <dt class="col-sm-4">Propietario:</dt>
+            <dd class="col-sm-8">@Model.Vendedor</dd>
+
+            <dt class="col-sm-4">Estado:</dt>
+            <dd class="col-sm-8">@Model.Estado</dd>
+
+            <dt class="col-sm-4">Condición:</dt>
+            <dd class="col-sm-8">@Model.Condicion</dd>
+
+            <dt class="col-sm-4">Fecha de registro:</dt>
+            <dd class="col-sm-8">@Model.FechaRegistro.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-4">Categorías:</dt>
+            <dd class="col-sm-8">
+                @if (Model.Categorias != null && Model.Categorias.Any())
+                {
+                    <span>@string.Join(", ", Model.Categorias)</span>
+                }
+                else
+                {
+                    <span>Sin categorías</span>
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<!-- HISTORIAL DE SUBASTAS -->
+@if (Model.HistorialSubastas != null && Model.HistorialSubastas.Any())
+{
+    <h3>Historial de Subastas</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id Subasta</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Cierre</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sub in Model.HistorialSubastas)
+            {
+                <tr>
+                    <td>@sub.IdSubasta</td>
+                    <td>@sub.FechaHoraInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@sub.FechaHoraCierre.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@sub.EstadoSubasta</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay historial de subastas para este objeto.</p>
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Volver al listado</a>

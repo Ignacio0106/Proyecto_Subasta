@@ -31,5 +31,5 @@ public partial class Usuario
 
     public virtual ICollection<ResultadoSubasta> ResultadoSubasta { get; set; } = new List<ResultadoSubasta>();
 
-    public virtual ICollection<Subasta> Subasta { get; set; } = new List<Subasta>();
+    public virtual ICollection<Subastaa> Subasta { get; set; } = new List<Subastaa>();
 }

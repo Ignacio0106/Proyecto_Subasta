@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Subasta.Aplication.DTOs;
 using Subasta.Infraestructure.Models;
 
 namespace Subasta.Aplication.Profiles
 {
-    public  class PagoProfile : Profile
+    public class PagoProfile : Profile
     {
         public PagoProfile()
         {
-            CreateMap<Pago, PagoDTO>();
-            /*CreateMap<Libro, LibroDTO>(); 
-             CreateMap<Autor, AutorDTO>() 
-                 .ForMember(d => d.Libros, opt => opt.MapFrom(s => s.Libro));*/
+            // ENTIDAD → DTO
+            CreateMap<Pago, PagoDTO>()
+                .ForMember(d => d.EstadoPago,
+                    o => o.MapFrom(s => s.IdEstadoPagoNavigation.Descripcion));
+
+            // DTO → ENTIDAD
+            CreateMap<PagoDTO, Pago>()
+                .ForMember(d => d.IdEstadoPagoNavigation, o => o.Ignore())
+                .ForMember(d => d.IdSubastaNavigation, o => o.Ignore());
         }
     }
 }

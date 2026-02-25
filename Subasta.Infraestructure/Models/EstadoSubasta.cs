@@ -9,5 +9,5 @@ public partial class EstadoSubasta
 
     public string Descripcion { get; set; } = null!;
 
-    public virtual ICollection<Subasta> Subasta { get; set; } = new List<Subasta>();
+    public virtual ICollection<Subastaa> Subasta { get; set; } = new List<Subastaa>();
 }

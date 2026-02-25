@@ -36,7 +36,7 @@ public partial class SubastaContext : DbContext
 
     public virtual DbSet<Rol> Rol { get; set; }
 
-    public virtual DbSet<Subasta.Infraestructure.Models.Subasta> Subasta { get; set; }
+    public virtual DbSet<Subasta.Infraestructure.Models.Subastaa> Subasta { get; set; }
 
     public virtual DbSet<Usuario> Usuario { get; set; }
 
@@ -232,7 +232,7 @@ public partial class SubastaContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Subasta.Infraestructure.Models.Subasta>(entity =>
+        modelBuilder.Entity<Subasta.Infraestructure.Models.Subastaa>(entity =>
         {
             entity.HasKey(e => e.IdSubasta).HasName("PK__Subasta__AA418F73851CAD69");
 

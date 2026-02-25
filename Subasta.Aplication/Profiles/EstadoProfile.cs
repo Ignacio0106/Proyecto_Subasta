@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Subasta.Aplication.DTOs;
 using Subasta.Infraestructure.Models;
 
 namespace Subasta.Aplication.Profiles
 {
-    public  class EstadoProfile : Profile
+    public class EstadoProfile : Profile
     {
         public EstadoProfile()
         {
+            // ENTIDAD → DTO (mostrar)
             CreateMap<Estado, EstadoDTO>();
-            /*CreateMap<Libro, LibroDTO>(); 
-             CreateMap<Autor, AutorDTO>() 
-                 .ForMember(d => d.Libros, opt => opt.MapFrom(s => s.Libro));*/
+
+            // DTO → ENTIDAD (crear / editar)
+            CreateMap<EstadoDTO, Estado>()
+                .ForMember(d => d.Objeto, o => o.Ignore())
+                .ForMember(d => d.Usuario, o => o.Ignore());
         }
     }
 }

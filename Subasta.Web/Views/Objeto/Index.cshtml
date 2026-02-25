@@ -1,0 +1,103 @@
+﻿@model IEnumerable<Subasta.Aplication.DTOs.ObjetoDTO>
+
+@{
+    ViewData["Title"] = "Listado de Objetos";
+    var total = Model?.Count() ?? 0;
+}
+
+<h1 class="h3 mb-3">Listado de Objetos</h1>
+<p class="text-muted mb-4">Total de objetos: <strong>@total</strong></p>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+        <i class="bi bi-info-circle me-2"></i>
+        <div>No hay objetos registrados en este momento.</div>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    <!-- Imagen -->
+                    <div class="overflow-hidden bg-light rounded-top" style="height: 220px;">
+                        @if (item.ImagenPrincipal != null && item.ImagenPrincipal.Length > 0)
+                        {
+                            <img class="w-100 h-100 object-fit-cover"
+                                 src="data:image/jpeg;base64,@Convert.ToBase64String(item.ImagenPrincipal)"
+                                 alt="Imagen de @item.Nombre"
+                                 loading="lazy" />
+                        }
+                        else
+                        {
+                            <div class="d-flex justify-content-center align-items-center h-100 text-muted">
+                                <i class="bi bi-image fs-1"></i>
+                                <span class="small ms-2">Sin imagen</span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Contenido -->
+                    <div class="card-body">
+                        <h2 class="h6 fw-semibold mb-1 text-truncate" title="@item.Nombre">
+                            @item.Nombre
+                        </h2>
+
+                        <div class="mb-1 text-muted small">
+                            <span class="badge bg-secondary me-1">
+                                @item.Condicion
+                            </span>
+                            <span class="badge bg-info text-dark">
+                                @item.Estado
+                            </span>
+                        </div>
+
+                        <div class="text-muted small mb-2">
+                            Categorías:
+                            @if (item.Categorias.Any())
+                            {
+                                @string.Join(", ", item.Categorias)
+                            }
+                            else
+                            {
+                                <span>Sin categoría</span>
+                            }
+                        </div>
+
+                        <div class="text-muted small">
+                            <i class="bi bi-person me-1"></i> Vendedor: @item.Vendedor
+                        </div>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="card-footer bg-body border-0 pt-0 pb-3">
+                        <div class="d-grid px-2">
+                            <a asp-controller="Objeto"
+                               asp-action="Details"
+                               asp-route-id="@item.IdObjeto"
+                               class="btn btn-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i> Ver detalle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <style>
+        .card:hover {
+            transform: translateY(-3px);
+            transition: transform 0.18s ease;
+        }
+
+        .object-fit-cover {
+            object-fit: cover;
+        }
+    </style>
+}

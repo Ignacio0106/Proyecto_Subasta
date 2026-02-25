@@ -88,8 +88,16 @@ builder.Services.AddControllersWithViews();
 
 //*** Services 
 builder.Services.AddTransient<IServiceUsuario, ServiceUsuario>();
-
 builder.Services.AddScoped<IRepositoryUsuario, RepositoryUsuario>();
+
+builder.Services.AddTransient<IServiceSubasta, ServiceSubasta>();
+builder.Services.AddScoped<IRepositorySubasta, RepositorySubasta>();
+
+builder.Services.AddTransient<IServicePuja, ServicePuja>();
+builder.Services.AddScoped<IRepositoryPuja, RepositoryPuja>();
+
+builder.Services.AddTransient<IServiceObjeto, ServiceObjeto>();
+builder.Services.AddScoped<IRepositoryObjeto, RepositoryObjeto>();
 
 
 // ======================= 
@@ -99,6 +107,9 @@ builder.Services.AddAutoMapper(config =>
 {
     //*** Profiles 
     config.AddProfile<UsuarioProfile>();
+    config.AddProfile<SubastaProfile>();
+    config.AddProfile<PujaProfile>();
+    config.AddProfile<ObjetoProfile>();
 });
 
 // ======================= 

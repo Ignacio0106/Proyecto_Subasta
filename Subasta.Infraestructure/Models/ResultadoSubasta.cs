@@ -15,7 +15,7 @@ public partial class ResultadoSubasta
 
     public DateTime FechaCierre { get; set; }
 
-    public virtual Subasta IdSubastaNavigation { get; set; } = null!;
+    public virtual Subastaa IdSubastaNavigation { get; set; } = null!;
 
     public virtual Usuario IdUsuarioGanadorNavigation { get; set; } = null!;
 }

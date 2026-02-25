@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Subasta.Aplication.DTOs.PujaDTO>
+
+@{
+    ViewData["Title"] = "HistorialPujas";
+}
+
+<h1>HistorialPujas</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdPuja)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MontoOfertado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaHora)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreUsuario)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPuja)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MontoOfertado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaHora)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreUsuario)
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>

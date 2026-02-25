@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Subasta.Aplication.DTOs.SubastaDTO>
+
+@{
+    ViewData["Title"] = "Finalizadas";
+}
+
+<h1>Finalizadas</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Objeto)</th>
+            <th>Imagen</th>
+            <th>@Html.DisplayNameFor(model => model.UsuarioCreador)</th>
+            <th>@Html.DisplayNameFor(model => model.EstadoSubasta)</th>
+            <th>@Html.DisplayNameFor(model => model.CantidadPujas)</th>
+            <th>@Html.DisplayNameFor(model => model.FechaHoraInicio)</th>
+            <th>@Html.DisplayNameFor(model => model.PrecioBase)</th>
+            <th>@Html.DisplayNameFor(model => model.IncrementoMinimo)</th>
+            <th>@Html.DisplayNameFor(model => model.FechaHoraCierre)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Objeto)</td>
+                <td>
+                    @if (item.Imagen != null && item.Imagen.Length > 0)
+                    {
+                        <img src="data:image/png;base64,@Convert.ToBase64String(item.Imagen)"
+                             alt="@item.Objeto" style="max-height:80px; max-width:80px;" />
+                    }
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.UsuarioCreador)</td>
+                <td>@Html.DisplayFor(modelItem => item.EstadoSubasta)</td>
+                <td>@Html.DisplayFor(modelItem => item.CantidadPujas)</td>
+                <td>@Html.DisplayFor(modelItem => item.FechaHoraInicio)</td>
+                <td>@Html.DisplayFor(modelItem => item.PrecioBase)</td>
+                <td>@Html.DisplayFor(modelItem => item.IncrementoMinimo)</td>
+                <td>@Html.DisplayFor(modelItem => item.FechaHoraCierre)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.IdSubasta }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.IdSubasta }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IdSubasta })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

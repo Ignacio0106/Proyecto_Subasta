@@ -27,7 +27,7 @@ public partial class Objeto
 
     public virtual ICollection<ImagenObjeto> ImagenObjeto { get; set; } = new List<ImagenObjeto>();
 
-    public virtual ICollection<Subasta> Subasta { get; set; } = new List<Subasta>();
+    public virtual ICollection<Subastaa> Subasta { get; set; } = new List<Subastaa>();
 
     public virtual ICollection<Categoria> IdCategoria { get; set; } = new List<Categoria>();
 }

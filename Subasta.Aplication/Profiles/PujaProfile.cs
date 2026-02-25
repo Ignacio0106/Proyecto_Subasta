@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Subasta.Aplication.DTOs;
 using Subasta.Infraestructure.Models;
 
@@ -13,10 +8,15 @@ namespace Subasta.Aplication.Profiles
     {
         public PujaProfile()
         {
-            CreateMap<Puja, PujaDTO>();
-            /*CreateMap<Libro, LibroDTO>(); 
-             CreateMap<Autor, AutorDTO>() 
-                 .ForMember(d => d.Libros, opt => opt.MapFrom(s => s.Libro));*/
+            CreateMap<Puja, PujaDTO>()
+     .ForMember(d => d.NombreUsuario,
+         o => o.MapFrom(s => s.IdUsuarioNavigation.NombreCompleto));
+
+            CreateMap<PujaDTO, Puja>()
+                .ForMember(d => d.IdUsuarioNavigation, o => o.Ignore())
+                .ForMember(d => d.IdSubastaNavigation, o => o.Ignore())
+                .ForMember(d => d.IdUsuario, o => o.Ignore());
+
         }
     }
 }

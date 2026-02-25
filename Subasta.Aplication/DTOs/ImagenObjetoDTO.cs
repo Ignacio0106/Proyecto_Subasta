@@ -10,7 +10,7 @@ namespace Subasta.Aplication.DTOs
     {
         public int IdImagen { get; set; }
 
-        public string ImagenBase64 { get; set; } = string.Empty;
+        public byte[] Imagen { get; set; } = Array.Empty<byte>();
 
         public int IdObjeto { get; set; }
     }

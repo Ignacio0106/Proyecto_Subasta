@@ -27,7 +27,7 @@ logger)
             {
                 // 1) Información de contexto 
                 var routeWhereExceptionOccured = context.Request.Path.Value ?? "N/A";
-                var eventId = $"{Guid.NewGuid(): N}-{DateTime.Now: yyMMddHHmmss}";
+                var eventId = $"{Guid.NewGuid():N}-{DateTime.Now: yyMMddHHmmss}";
 
                 // 2) Construir respuesta para UI 
                 var result = new ErrorMiddlewareViewModel
@@ -50,10 +50,13 @@ logger)
                 var messagesJson = JsonSerializer.Serialize(result);
 
                 // 5) Encode para URL (evita romper la URL y reduce riesgo) 
-                var redirectUrl = QueryHelpers.AddQueryString("/Home/ErrorHandler",
-"messagesJson", messagesJson);
-
-                context.Response.Redirect(redirectUrl);
+                context.Response.ContentType = "text/html";
+                await context.Response.WriteAsync($@"
+    <h1>Ocurrió un error</h1>
+    <p>EventId: {eventId}</p>
+    <p>Ruta: {routeWhereExceptionOccured}</p>
+    <p>Mensajes: {string.Join(", ", result.ListMessages)}</p>
+");
             }
         }
 

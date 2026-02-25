@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Subasta.Infraestructure.Models;
 
-public partial class Subasta
+public partial class Subastaa
 {
     public int IdSubasta { get; set; }
 

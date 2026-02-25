@@ -1,0 +1,48 @@
+﻿@model Subasta.Aplication.DTOs.UsuarioDTO
+
+@{
+    ViewData["Title"] = "Detalle de Usuario";
+}
+
+<h1>DETALLE DE USUARIO</h1>
+
+<hr />
+
+<h4>Información básica del perfil</h4>
+<dl class="row">
+
+    <dt class="col-sm-3">Nombre completo</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(model => model.NombreCompleto)</dd>
+
+    <dt class="col-sm-3">Rol</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(model => model.Rol)</dd>
+
+    <dt class="col-sm-3">Estado</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(model => model.Estado)</dd>
+
+    <dt class="col-sm-3">Fecha de registro</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaRegistro)</dd>
+
+</dl>
+
+<hr />
+
+<h4>Historial mínimo asociado</h4>
+<dl class="row">
+    @* Mostrar solo la cantidad correspondiente según rol *@
+    @if (Model.CantidadSubastas.HasValue)
+    {
+        <dt class="col-sm-3">Cantidad de subastas creadas</dt>
+        <dd class="col-sm-9">@Model.CantidadSubastas</dd>
+    }
+
+    @if (Model.CantidadPujas.HasValue)
+    {
+        <dt class="col-sm-3">Cantidad de pujas realizadas</dt>
+        <dd class="col-sm-9">@Model.CantidadPujas</dd>
+    }
+</dl>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+</div>

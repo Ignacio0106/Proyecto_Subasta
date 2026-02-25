@@ -15,7 +15,7 @@ public partial class Puja
 
     public int IdSubasta { get; set; }
 
-    public virtual Subasta IdSubastaNavigation { get; set; } = null!;
+    public virtual Subastaa IdSubastaNavigation { get; set; } = null!;
 
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }

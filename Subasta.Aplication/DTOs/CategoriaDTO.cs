@@ -11,5 +11,6 @@ namespace Subasta.Aplication.DTOs
         public int IdCategoria { get; set; }
 
         public string Nombre { get; set; } = string.Empty;
+        public ICollection<ObjetoDTO>? Objetos { get; set; }
     }
 }

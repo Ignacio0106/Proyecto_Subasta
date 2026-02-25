@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Subasta.Aplication.DTOs
 {
-    public record  EstadoSubasta_DTO
+    public record  EstadoSubastaDTO
     {
         public int IdEstadoSubasta { get; set; }
 

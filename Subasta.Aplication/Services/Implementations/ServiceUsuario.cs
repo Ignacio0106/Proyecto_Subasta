@@ -21,9 +21,33 @@ namespace Subasta.Aplication.Services.Implementations
             _mapper = mapper;
         }
 
-        public Task<UsuarioDTO?> FindByIdAsync(int id)
+        public async Task<UsuarioDTO?> FindByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var usuario = await _repository.FindByIdAsync(id);
+
+            if (usuario == null)
+                return null;
+
+            var dto = _mapper.Map<UsuarioDTO>(usuario);
+
+            // Lógica condicional según rol
+            if (usuario.IdRolNavigation.NombreRol == "Vendedor") // o usuario.Rol == "Vendedor"
+            {
+                dto.CantidadSubastas = usuario.Subasta.Count(s => s.IdUsuarioCreador == usuario.IdUsuario);
+                dto.CantidadPujas = null; // no mostrar
+            }
+            else if (usuario.IdRolNavigation.NombreRol == "Comprador") // o usuario.Rol == "Comprador"
+            {
+                dto.CantidadPujas = usuario.Puja.Count(p => p.IdUsuario == usuario.IdUsuario);
+                dto.CantidadSubastas = null; // no mostrar
+            }
+            else
+            {
+                dto.CantidadSubastas = usuario.Subasta.Count(s => s.IdUsuarioCreador == usuario.IdUsuario); ;
+                dto.CantidadPujas = usuario.Puja.Count(p => p.IdUsuario == usuario.IdUsuario); ;
+            }
+
+            return dto;
         }
 
         public async Task<ICollection<UsuarioDTO>> ListAsync()
