@@ -18,11 +18,16 @@ namespace Subasta.Aplication.Profiles
         opt => opt.MapFrom(src => src.IdEstadoSubastaNavigation.Descripcion))
     .ForMember(dest => dest.CantidadPujas,
         opt => opt.MapFrom(src => src.Puja.Count()))
-    .ForMember(dest => dest.Imagen,
-        opt => opt.MapFrom(src => src.IdObjetoNavigation.ImagenObjeto
+    .ForMember(d => d.ImagenPrincipal, o => o.MapFrom(s =>
+        s.IdObjetoNavigation.ImagenObjeto
             .OrderBy(i => i.IdImagen)
             .Select(i => i.Imagen)
             .FirstOrDefault()))
+    .ForMember(d => d.Imagenes, o => o.MapFrom(s =>
+        s.IdObjetoNavigation.ImagenObjeto
+            .OrderBy(i => i.IdImagen)
+            .Select(i => i.Imagen)
+            .ToList()))
     .ForMember(dest => dest.Condicion,
         opt => opt.MapFrom(src => src.IdObjetoNavigation.IdCondicionNavigation.Descripcion));
 

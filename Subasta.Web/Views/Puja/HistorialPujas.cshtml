@@ -4,47 +4,59 @@
     ViewData["Title"] = "HistorialPujas";
 }
 
-<h1>HistorialPujas</h1>
+<h2 class="fw-bold mb-4">HistorialPujas</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IdPuja)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MontoOfertado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaHora)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreUsuario)
-            </th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdPuja)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MontoOfertado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaHora)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreUsuario)
-            </td>
-            
-        </tr>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No hay pujas registradas para esta subasta.
+    </div>
 }
-    </tbody>
-</table>
+else
+{
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Usuario</th>
+                        <th class="text-center">Monto Ofertado</th>
+                        <th class="text-center">Fecha y Hora</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">
+                                @item.NombreUsuario
+                            </td>
+                            <td class="text-center fw-bold text-success">
+                                @item.MontoOfertado.ToString("C")
+                            </td>
+                            <td class="text-center">
+                                @item.FechaHora.ToString("f")
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-5">
+        <a asp-controller="Subastaa"
+           asp-action="Details"
+           asp-route-id="@ViewBag.IdSubasta"
+           class="btn btn-outline-primary">
+            Volver al Detalle
+            <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+    </div>
+}

@@ -2,47 +2,123 @@
 
 @{
     ViewData["Title"] = "Detalle de Usuario";
+
+    var inicial = !string.IsNullOrEmpty(Model.NombreCompleto)
+        ? Model.NombreCompleto.Trim()[0].ToString().ToUpper()
+        : "U";
+
+    var rolClass = Model.Rol switch
+    {
+        "Administrador" => "bg-dark",
+        "Vendedor" => "bg-primary",
+        "Comprador" => "bg-secondary",
+        _ => "bg-light text-dark border"
+    };
+
+    var estadoActivo = Model.Estado == "Activo";
 }
 
-<h1>DETALLE DE USUARIO</h1>
+<div class="container mt-5">
 
-<hr />
+    <div class="card shadow-sm border-0 rounded-4">
 
-<h4>Información básica del perfil</h4>
-<dl class="row">
+        <div class="card-body border-bottom">
 
-    <dt class="col-sm-3">Nombre completo</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(model => model.NombreCompleto)</dd>
+            <div class="d-flex align-items-center">
 
-    <dt class="col-sm-3">Rol</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(model => model.Rol)</dd>
+                <!-- Avatar -->
+                <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center fw-bold text-primary me-4"
+                     style="width: 70px; height: 70px; font-size: 28px;">
+                    @inicial
+                </div>
 
-    <dt class="col-sm-3">Estado</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(model => model.Estado)</dd>
+                <div>
+                    <h3 class="fw-bold mb-1">@Model.NombreCompleto</h3>
 
-    <dt class="col-sm-3">Fecha de registro</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(model => model.FechaRegistro)</dd>
+                    <span class="badge @rolClass me-2 px-3 py-2">
+                        @Model.Rol
+                    </span>
 
-</dl>
+                    <span class="badge rounded-pill px-3 py-2 @(estadoActivo ? "bg-success" : "bg-danger")">
+                        <i class="bi @(estadoActivo ? "bi-check-circle-fill" : "bi-x-circle-fill") me-1"></i>
+                        @Model.Estado
+                    </span>
+                </div>
 
-<hr />
+            </div>
 
-<h4>Historial mínimo asociado</h4>
-<dl class="row">
-    @* Mostrar solo la cantidad correspondiente según rol *@
-    @if (Model.CantidadSubastas.HasValue)
-    {
-        <dt class="col-sm-3">Cantidad de subastas creadas</dt>
-        <dd class="col-sm-9">@Model.CantidadSubastas</dd>
-    }
+        </div>
 
-    @if (Model.CantidadPujas.HasValue)
-    {
-        <dt class="col-sm-3">Cantidad de pujas realizadas</dt>
-        <dd class="col-sm-9">@Model.CantidadPujas</dd>
-    }
-</dl>
+        <!-- Información -->
+        <div class="card-body">
 
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+            <h5 class="fw-semibold mb-3">Información básica</h5>
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">Fecha de registro</div>
+                <div class="col-md-8 fw-semibold">
+                    @Model.FechaRegistro.ToString("dd MMMM yyyy")
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Historial -->
+        @if (!(Model.Rol == "Administrador")){
+        <div class="card-body bg-light rounded-bottom-4">
+
+            <h5 class="fw-semibold mb-4">Historial asociado</h5>
+
+            <div class="row text-center">
+
+                @if (Model.CantidadSubastas.HasValue)
+                {
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <i class="bi bi-hammer display-6 text-primary"></i>
+                                <h4 class="fw-bold mt-2">@Model.CantidadSubastas</h4>
+                                <p class="text-muted mb-0">Subastas creadas</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.CantidadPujas.HasValue)
+                {
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <i class="bi bi-cash-coin display-6 text-success"></i>
+                                <h4 class="fw-bold mt-2">@Model.CantidadPujas</h4>
+                                <p class="text-muted mb-0">Pujas realizadas</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+        </div>
+        }
+        <!-- Footer -->
+        <div class="card-footer bg-white text-end border-0">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.IdUsuario"
+               class="btn btn-primary me-2">
+                <i class="bi bi-pencil-square me-1"></i>
+                Editar
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-outline-dark">
+                <i class="bi bi-arrow-left me-1"></i>
+                Volver al listado
+            </a>
+
+        </div>
+
+    </div>
+
 </div>

@@ -1,0 +1,182 @@
+﻿<nav class="navbar navbar-expand-lg premium-navbar">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-hammer me-2 text-warning"></i>
+            <span class="brand-text; text-white">Subasta</span>
+        </a>
+
+        <!-- BOTÓN RESPONSIVE -->
+        <button class="navbar-toggler border-0" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                aria-controls="navbarMain" aria-expanded="false" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                @*class="nav-item">
+                    <a class="nav-link premium-link"
+                       asp-controller="Objeto" asp-action="Index">
+                        <i class="bi bi-collection me-1"></i>Subastas
+                    </a>
+                </li>*@
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle premium-link"
+                       href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="bi bi-wrench me-1"></i>Mantenimiento
+                    </a>
+                    <ul class="dropdown-menu premium-dropdown">
+                        <li><a class="dropdown-item" asp-controller="Usuario" asp-action="Index">Usuarios</a></li>
+                        <li><a class="dropdown-item" asp-controller="Objeto" asp-action="Index">Objetos</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle premium-link"
+                       href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="bi bi-wrench me-1"></i>Subastas
+                    </a>
+                    <ul class="dropdown-menu premium-dropdown">
+                        <li><a class="dropdown-item" asp-controller="Subastaa" asp-action="Activas">Activas</a></li>
+                        <li><a class="dropdown-item" asp-controller="Subastaa" asp-action="Finalizadas">Finalizadas</a></li>
+                    </ul>
+                </li>
+
+                @* <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle premium-link"
+                       href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="bi bi-wrench me-1"></i>Proceso
+                    </a>
+                    <ul class="dropdown-menu premium-dropdown">
+                        <li><a class="dropdown-item" asp-controller="Usuario" asp-action="Index">Usuarios</a></li>
+                        <li><a class="dropdown-item" asp-controller="Pago" asp-action="Index">Pagos</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle premium-link"
+                       href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="bi bi-wrench me-1"></i>Reportes
+                    </a>
+                    <ul class="dropdown-menu premium-dropdown">
+                        <li><a class="dropdown-item" asp-controller="Usuario" asp-action="Index">Usuarios</a></li>
+                        <li><a class="dropdown-item" asp-controller="Pago" asp-action="Index">Pagos</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle premium-link"
+                       href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-people me-1"></i>Seguridad
+                    </a>
+                    <ul class="dropdown-menu premium-dropdown">
+                        <li>
+                            <a class="dropdown-item"
+                               asp-controller="Usuario" asp-action="Index">
+                                Usuarios
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center premium-link"
+                       href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="rounded-circle me-2 profile-img" 
+                             src="~/images/profile.png" alt="Perfil"
+                             width="34" height="34" />
+                        <span class="d-none d-sm-inline fw-semibold">
+                            Invitado
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end premium-dropdown">
+                        <li><a class="dropdown-item">Ingresar</a></li>
+                        <li><a class="dropdown-item text-danger">Salir</a></li>
+                    </ul>
+                </li> *@
+            </ul>
+
+        </div>
+    </div>
+</nav>
+<style>
+    /* NAVBAR GENERAL */
+    .premium-navbar {
+        background: rgba(15, 15, 15, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 15px 0;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        
+
+    }
+
+    /* LOGO */
+    .brand-text {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* LINKS */
+    .premium-link {
+        position: relative;
+        font-weight: 500;
+        margin-right: 15px;
+        transition: 0.3s ease;
+        color: white;
+    }
+
+        .premium-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0%;
+            height: 2px;
+            background: #ffc107;
+            transition: 0.3s ease;
+        }
+
+        .premium-link:hover::after {
+            width: 100%;
+        }
+
+        .premium-link:hover {
+            color: #ffc107 !important;
+        }
+
+    /* DROPDOWN */
+    .premium-dropdown {
+        background: #1c1c1c;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        padding: 10px;
+    }
+
+        .premium-dropdown .dropdown-item {
+            color: #ddd;
+            border-radius: 8px;
+            transition: 0.2s ease;
+        }
+
+            .premium-dropdown .dropdown-item:hover {
+                background: rgba(255, 193, 7, 0.1);
+                color: #ffc107;
+            }
+
+    /* IMAGEN PERFIL */
+    .profile-img {
+        border: 2px solid #ffc107;
+        object-fit: cover;
+    }
+</style>

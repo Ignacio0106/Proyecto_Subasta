@@ -22,11 +22,13 @@ else
         {
             <div class="col">
                 <div class="card h-100 shadow-sm border-0">
-                    <!-- Imagen -->
-                    <div class="overflow-hidden bg-light rounded-top" style="height: 220px;">
+                    <div class="bg-light rounded-top d-flex justify-content-center align-items-center"
+                         style="height: 220px; overflow: hidden;">
+
                         @if (item.ImagenPrincipal != null && item.ImagenPrincipal.Length > 0)
                         {
-                            <img class="w-100 h-100 object-fit-cover"
+                            <img class="img-fluid"
+                                 style="max-height: 100%; max-width: 100%; object-fit: contain;"
                                  src="data:image/jpeg;base64,@Convert.ToBase64String(item.ImagenPrincipal)"
                                  alt="Imagen de @item.Nombre"
                                  loading="lazy" />
@@ -39,37 +41,30 @@ else
                             </div>
                         }
                     </div>
-
-                    <!-- Contenido -->
                     <div class="card-body">
                         <h2 class="h6 fw-semibold mb-1 text-truncate" title="@item.Nombre">
                             @item.Nombre
                         </h2>
 
-                        <div class="mb-1 text-muted small">
-                            <span class="badge bg-secondary me-1">
-                                @item.Condicion
-                            </span>
-                            <span class="badge bg-info text-dark">
-                                @item.Estado
-                            </span>
-                        </div>
-
-                        <div class="text-muted small mb-2">
-                            Categorías:
+                        <p class="small mb-2">
+                            <strong>Categorías:</strong><br />
                             @if (item.Categorias.Any())
                             {
-                                @string.Join(", ", item.Categorias)
+                                foreach (var categoria in item.Categorias)
+                                {
+                                    <span class="badge border-1 border-info text-primary bg-light px-2 py-2 rounded-pill shadow-sm m-1">@categoria</span>
+                                }
                             }
                             else
                             {
-                                <span>Sin categoría</span>
+                                <span class="text-muted">Sin categoría</span>
                             }
-                        </div>
+                        </p>
 
-                        <div class="text-muted small">
-                            <i class="bi bi-person me-1"></i> Vendedor: @item.Vendedor
-                        </div>
+                        <p class="small mb-0">
+                            <strong>Condición:</strong>
+                                @item.Condicion
+                        </p>
                     </div>
 
                     <!-- Acciones -->

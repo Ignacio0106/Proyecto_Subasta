@@ -43,8 +43,8 @@ namespace Subasta.Aplication.Services.Implementations
             }
             else
             {
-                dto.CantidadSubastas = usuario.Subasta.Count(s => s.IdUsuarioCreador == usuario.IdUsuario); ;
-                dto.CantidadPujas = usuario.Puja.Count(p => p.IdUsuario == usuario.IdUsuario); ;
+                dto.CantidadSubastas = null ;
+                dto.CantidadPujas = null ;
             }
 
             return dto;

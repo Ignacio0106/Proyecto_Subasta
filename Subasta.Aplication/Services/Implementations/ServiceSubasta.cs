@@ -1,12 +1,13 @@
-﻿using System;
+﻿using AutoMapper;
+using Subasta.Aplication.DTOs;
+using Subasta.Aplication.Services.Interfaces;
+using Subasta.Infraestructure.Models;
+using Subasta.Infraestructure.Repository.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-using Subasta.Aplication.DTOs;
-using Subasta.Aplication.Services.Interfaces;
-using Subasta.Infraestructure.Repository.Interfaces;
 
 namespace Subasta.Aplication.Services.Implementations
 {
@@ -23,19 +24,17 @@ namespace Subasta.Aplication.Services.Implementations
 
         public async Task<SubastaDTO?> FindByIdAsync(int id)
         {
-
             var subasta = await _repository.FindByIdAsync(id);
 
             if (subasta == null)
                 return null;
 
-
             var dto = _mapper.Map<SubastaDTO>(subasta);
 
-
-            dto.CantidadPujas = subasta.Puja.Count();
-            dto.Categorias = subasta.IdObjetoNavigation?.IdCategoria?.Select(c => c.Nombre).ToList()
-                             ?? new List<string>();
+            // Solo lo que NO está en el Profile
+            dto.Categorias = subasta.IdObjetoNavigation?.IdCategoria?
+                                .Select(c => c.Nombre)
+                                .ToList() ?? new List<string>();
 
             return dto;
         }

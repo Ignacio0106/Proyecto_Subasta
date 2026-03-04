@@ -25,8 +25,8 @@ namespace Subasta.Aplication.DTOs
         public string Objeto { get; set; } = "Objeto no definido";
         [DisplayName("Cantidad de Pujas")]
         public int CantidadPujas { get; set; } = 0;
-        public byte[]? Imagen { get; set; }
-
+        public byte[]? ImagenPrincipal { get; set; }
+        public List<byte[]>? Imagenes { get; set; } = new List<byte[]>();
 
         public string Condicion { get; set; } = "Sin definir";
         public List<string> Categorias { get; set; } = new List<string>();

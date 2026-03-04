@@ -3,44 +3,129 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Subasta.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - Subasta</title>
+    @* Bootstrap 5.3.8*@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min (1).css" />
+    @* Bootstrap Icons *@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    @* Estilos propios*@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Subasta.Web.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Subasta.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+<body class="d-flex flex-column">
+    <header class="sticky-top">
+        @await Html.PartialAsync("_Menu")
+    </header>
+    <main id="mainContent" class="flex-grow-1">
+        <div class="container py-3">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="premium-footer">
+
+        <div class="container py-5">
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <h5 class="footer-brand">
+                        <i class="bi bi-hammer text-warning me-2"></i>
+                        Subasta
+                    </h5>
+
+                    <p class="footer-text mt-3">
+                        Plataforma profesional para la gestión de subastas,
+                        pujas en tiempo real y administración segura de pagos.
+                    </p>
+                </div>
+
+                <div class="col-md-2">
+                    <h6 class="footer-title">Explorar</h6>
+                    <ul class="footer-links">
+                        <li>
+                            <a asp-controller="Subasta" asp-action="Index">
+                                Subastas Activas
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li>
+                            <a asp-controller="Objeto" asp-action="Index">
+                                Objetos
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Subasta.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
+
+        <div class="footer-bottom text-center py-3">
+            © @DateTime.Now.Year - SubastaPro | Sistema Profesional de Subastas
+        </div>
+
     </footer>
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        /* FOOTER GENERAL */
+        .premium-footer {
+            background: linear-gradient(135deg, #111 0%, #1c1c1c 100%);
+            color: #ccc;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* MARCA */
+        .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #fff;
+        }
+
+        /* TEXTOS */
+        .footer-text {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        /* TÍTULOS */
+        .footer-title {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* LINKS */
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+            .footer-links li {
+                margin-bottom: 8px;
+            }
+
+            .footer-links a {
+                text-decoration: none;
+                color: #aaa;
+                transition: 0.3s ease;
+            }
+
+                .footer-links a:hover {
+                    color: #ffc107;
+                    padding-left: 5px;
+                }
+
+        /* BARRA INFERIOR */
+        .footer-bottom {
+            background: #0d0d0d;
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+    </style>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

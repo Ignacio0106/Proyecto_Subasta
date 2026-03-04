@@ -1,8 +1,197 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Sistema de Subastas";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="d-flex align-items-center text-white h-100 bg-black/50">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-3 hero-title">
+            Sistema Profesional de Subastas de Arte
+        </h1>
+
+        <p class="lead mb-4 mx-auto" style="max-width: 750px;">
+            Publica objetos, crea subastas, realiza pujas en tiempo real
+            y gestiona automáticamente el cierre, ganador y pagos.
+        </p>
+
+        <a asp-controller="Subasta" asp-action="Index"
+           class="btn btn-warning btn-lg px-5 rounded-pill shadow-lg">
+            Explorar Subastas Activas
+        </a>
+    </div>
+</section>
+
+<!-- SUBASTAS ACTIVAS DESTACADAS -->
+<section class="container py-5">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold section-title">Subastas Activas</h2>
+        <p class="text-muted">Participa antes de que finalicen</p>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="premium-card">
+                <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=1470&auto=format&fit=crop"
+                     class="img-fluid rounded-top" style="height:260px; object-fit:cover;">
+                <div class="p-4">
+                    <h5 class="fw-bold">Óleo Contemporáneo</h5>
+                    <p class="text-muted small">Precio base: ₡800,000</p>
+                    <p class="text-muted small">Incremento mínimo: ₡25,000</p>
+                    <a asp-controller="Subasta" asp-action="Index"
+                       class="btn btn-outline-dark btn-sm mt-2 rounded-pill">
+                        Realizar Puja
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="premium-card">
+                <img src="https://images.unsplash.com/photo-1578926288207-a90a5366759d?q=80&w=1470&auto=format&fit=crop"
+                     class="img-fluid rounded-top" style="height:260px; object-fit:cover;">
+                <div class="p-4">
+                    <h5 class="fw-bold">Arte Abstracto</h5>
+                    <p class="text-muted small">Precio base: ₡1,200,000</p>
+                    <p class="text-muted small">Incremento mínimo: ₡50,000</p>
+                    <a asp-controller="Subasta" asp-action="Index"
+                       class="btn btn-outline-dark btn-sm mt-2 rounded-pill">
+                        Realizar Puja
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="premium-card">
+                <img src="https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?q=80&w=1470&auto=format&fit=crop"
+                     class="img-fluid rounded-top" style="height:260px; object-fit:cover;">
+                <div class="p-4">
+                    <h5 class="fw-bold">Minimalismo Moderno</h5>
+                    <p class="text-muted small">Precio base: ₡950,000</p>
+                    <p class="text-muted small">Incremento mínimo: ₡30,000</p>
+                    <a asp-controller="Subasta" asp-action="Index"
+                       class="btn btn-outline-dark btn-sm mt-2 rounded-pill">
+                        Realizar Puja
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- MÓDULOS DEL SISTEMA -->
+<section class="dark-section py-5">
+    <div class="container">
+        <div class="row g-4 text-center text-white">
+
+            <div class="col-md-3">
+                <div class="icon-box">
+                    <i class="bi bi-people-fill fs-1 mb-3 text-warning"></i>
+                    <h5 class="fw-bold">Usuarios</h5>
+                    <p class="small opacity-75">
+                        Registro, autenticación, roles y control de acceso.
+                    </p>
+                    <a asp-controller="Usuario" asp-action="Index"
+                       class="btn btn-outline-light btn-sm rounded-pill mt-2">
+                        Gestionar
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="icon-box">
+                    <i class="bi bi-box-seam fs-1 mb-3 text-info"></i>
+                    <h5 class="fw-bold">Objetos</h5>
+                    <p class="small opacity-75">
+                        Administración de obras y categorías.
+                    </p>
+                    <a asp-controller="Objeto" asp-action="Index"
+                       class="btn btn-outline-light btn-sm rounded-pill mt-2">
+                        Ver Objetos
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="icon-box">
+                    <i class="bi bi-hammer fs-1 mb-3 text-danger"></i>
+                    <h5 class="fw-bold">Subastas</h5>
+                    <p class="small opacity-75">
+                        Creación, publicación y cierre automático.
+                    </p>
+                    <a asp-controller="Subasta" asp-action="Index"
+                       class="btn btn-outline-light btn-sm rounded-pill mt-2">
+                        Ir a Subastas
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="icon-box">
+                    <i class="bi bi-credit-card fs-1 mb-3 text-success"></i>
+                    <h5 class="fw-bold">Pagos</h5>
+                    <p class="small opacity-75">
+                        Registro y confirmación de pagos simulados.
+                    </p>
+                    <a asp-controller="Pago" asp-action="Index"
+                       class="btn btn-outline-light btn-sm rounded-pill mt-2">
+                        Ver Pagos
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<style>
+
+    /* HERO */
+    /*.hero-art {
+        height: 85vh;
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1471&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+    }*/
+
+    /*.hero-title {
+        font-family: 'Playfair Display', serif;
+        letter-spacing: -1px;
+    }*/
+
+    /* TARJETAS */
+    /*.premium-card {
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: 0.3s ease;
+        box-shadow: 0 1rem 2rem rgba(0,0,0,0.08);
+    }
+
+        .premium-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 1.5rem 3rem rgba(0,0,0,0.15);*/
+        }
+
+    /* SECCIÓN OSCURA */
+    /*.dark-section {
+        background: linear-gradient(135deg, #111 0%, #1c1c1c 100%);
+    }
+
+    .icon-box {
+        padding: 30px;
+        transition: 0.3s ease;
+    }
+
+        .icon-box:hover {
+            transform: translateY(-8px);
+        }
+
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        letter-spacing: -0.5px;
+    }*/
+
+</style>

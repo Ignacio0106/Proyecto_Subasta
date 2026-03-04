@@ -4,82 +4,205 @@
     ViewData["Title"] = "Detalle de Subasta";
 }
 
-<h1 class="mb-4">Detalle de Subasta #@Model.IdSubasta</h1>
+<h1 class="mb-4">Subasta #@Model.IdSubasta</h1>
 
 <div class="row">
-    <!-- Información del objeto -->
-    <div class="col-md-5">
+    <d-iv class="col-md-5">
         <div class="card mb-3">
-            <div class="card-header">
+            <div class="card-header bg-dark text-white fw-semibold">
                 Información del Objeto
             </div>
             <div class="card-body text-center">
-                <h5 class="card-title">@Model.Objeto</h5>
+                <h5 class="mb-4">@Model.Objeto</h5>
+                <div class="d-flex align-content-center justify-content-center">
+                 <div class="col-md-6">
 
-                @if (Model.Imagen != null && Model.Imagen.Length > 0)
-                {
-                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagen)"
-                         alt="@Model.Objeto" class="img-fluid rounded mb-2" />
-                }
-                else
-                {
-                    <div class="text-muted mb-2">Sin imagen disponible</div>
-                }
-
-                <p>
-                    <strong>Categorías:</strong>
-                    @if (Model.Categorias != null && Model.Categorias.Any())
+                    @if (Model.Imagenes != null && Model.Imagenes.Any())
                     {
-                        @string.Join(", ", Model.Categorias)
+                        <div id="carouselImagenes" class="carousel slide shadow rounded" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+
+                                @for (int i = 0; i < Model.Imagenes.Count; i++)
+                                {
+                                    var imagen = Model.Imagenes[i];
+
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <div class="d-flex justify-content-center align-items-center"
+                                             style="height: 400px;">
+
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(imagen)"
+                                                 style="max-height:100%; max-width:100%; object-fit:contain;"
+                                                 class="rounded shadow-sm"
+                                                 alt="Imagen @(i + 1)">
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+
+                            <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselImagenes"
+                                    data-bs-slide="prev">
+
+                                <span class="d-flex justify-content-center align-items-center  bg-dark rounded-circle"
+                                      style="width:40px; height:40px;">
+                                    <span class="carousel-control-prev-icon "></span>
+                                </span>
+
+                            </button>
+
+                            <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselImagenes"
+                                    data-bs-slide="next">
+
+                                <span class="d-flex justify-content-center align-items-center bg-dark rounded-circle"
+                                      style="width:40px; height:40px;">
+                                    <span class="carousel-control-next-icon"></span>
+                                </span>
+
+                            </button>
+                        </div>
                     }
                     else
                     {
-                        <span class="text-muted">Sin categorías</span>
+                        <div class="alert alert-secondary text-center">
+                            No hay imágenes disponibles para este objeto.
+                        </div>
                     }
-                </p>
-                <p><strong>Condición:</strong> @Model.Condicion</p>
+
+                </div> 
+                </div>
+
+                @* @if (Model.Imagen != null && Model.Imagen.Length > 0)
+                {
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagen)"
+                         alt="@Model.Objeto"
+                         class="img-fluid rounded shadow-sm mb-3"
+                         style="max-height: 350px; object-fit: cover;" />
+                }
+                else
+                {
+                    <div class="bg-light rounded p-5 text-muted">
+                        Sin imagen disponible
+                    </div>
+                } *@
+                <div class="p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <span class="fw-bold">Estado del objeto</span>
+                        <span class="badge rounded-pill bg-primary px-3 shadow-sm">@Model.Condicion</span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="me-3">
+                        <span class="fw-bold">Categorías</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        @if (Model.Categorias != null && Model.Categorias.Any())
+                        {
+                            foreach (var cat in Model.Categorias)
+                            {
+                                <span class="badge border-1 border-info text-primary bg-light px-3 py-2 rounded-pill shadow-sm">@cat</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted fst-italic">Sin categorías</span>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </d-iv>
 
-    <!-- Información de la subasta -->
     <div class="col-md-7">
         <div class="card mb-3">
-            <div class="card-header">
+            <div class="card-header bg-dark text-white fw-semibold">
                 Datos de la Subasta
             </div>
             <div class="card-body">
-                <dl class="row">
-                    <dt class="col-sm-5">Fecha de inicio</dt>
-                    <dd class="col-sm-7">@Model.FechaHoraInicio.ToString("g")</dd>
 
-                    <dt class="col-sm-5">Fecha de cierre</dt>
-                    <dd class="col-sm-7">@Model.FechaHoraCierre.ToString("g")</dd>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <small>Fecha de inicio</small>
+                        <div class="fw-semibold">
+                            @Model.FechaHoraInicio.ToString("f")
+                        </div>
+                    </div>
 
-                    <dt class="col-sm-5">Precio base</dt>
-                    <dd class="col-sm-7">@Model.PrecioBase.ToString("C")</dd>
+                    <div class="col-md-6">
+                        <small>Fecha de cierre</small>
+                        <div class="fw-semibold">
+                            @Model.FechaHoraCierre.ToString("f")
+                        </div>
+                    </div>
+                </div>
 
-                    <dt class="col-sm-5">Incremento mínimo</dt>
-                    <dd class="col-sm-7">@Model.IncrementoMinimo.ToString("C")</dd>
+                <hr />
 
-                    <dt class="col-sm-5">Estado actual</dt>
-                    <dd class="col-sm-7">@Model.EstadoSubasta</dd>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <small>Precio base</small>
+                        <div class="fs-5 fw-bold text-success">
+                            ₡@Model.PrecioBase
+                        </div>
+                    </div>
 
-                    <dt class="col-sm-5">Cantidad total de pujas</dt>
-                    <dd class="col-sm-7">@Model.CantidadPujas</dd>
+                    <div class="col-md-6">
+                        <small>Incremento mínimo</small>
+                        <div class="fw-semibold text-info">
+                            ₡@Model.IncrementoMinimo
+                        </div>
+                    </div>
+                </div>
 
-                    <dt class="col-sm-5">Usuario creador</dt>
-                    <dd class="col-sm-7">@Model.UsuarioCreador</dd>
-                </dl>
+                <hr />
 
-                <a asp-controller="Puja" asp-action="HistorialPujas" asp-route-id="@Model.IdSubasta" class="btn btn-primary mt-3">
-                    <i class="bi bi-clock-history me-1"></i> Ver historial de pujas
-                </a>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <small>Estado actual</small>
+                        <div>
+                            @{
+                                var estadoClass = Model.EstadoSubasta == "Activa"
+                                ? "bg-success"
+                                : "bg-danger";
+                            }
+
+                            <span class="badge @estadoClass rounded-pill px-3 py-2">
+                                @Model.EstadoSubasta
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small>Cantidad total de pujas</small>
+                        <div class="fw-bold fs-5">
+                            @Model.CantidadPujas
+                        </div>
+                    </div>
+                </div>
+                @if (Model.CantidadPujas > 0)
+                {
+                    <div class="mt-4">
+                        <a asp-controller="Puja" asp-action="HistorialPujas" asp-route-id="@Model.IdSubasta" class="btn btn-outline-primary">
+                            Ver historial de pujas
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
 
 <div class="mt-3">
-    <a asp-action="Activas" class="btn btn-secondary">Volver a Subastas Activas</a>
+    @if (Model.EstadoSubasta == "Activa")
+    {
+        <a asp-action="Activas" class="btn btn-outline-dark">
+            <i class="bi bi-arrow-left me-1"></i>Volver a Subastas Activas
+        </a>
+    } else
+    {
+        <a asp-action="Finalizadas" class="btn btn-outline-dark">
+            <i class="bi bi-arrow-left me-1"></i>Volver a Subastas Finalizadas
+        </a>
+    }
 </div>
