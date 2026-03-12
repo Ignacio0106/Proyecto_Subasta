@@ -29,8 +29,6 @@ namespace Subasta.Infraestructure.Repository.Implementations
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.IdUsuario == id);
         }
-        
-
 
         public async Task<ICollection<Usuario>> ListAsync()
         {
@@ -41,5 +39,31 @@ namespace Subasta.Infraestructure.Repository.Implementations
                 .ToListAsync();
         }
 
+        public async Task UpdateAsync(Usuario entity)
+        {
+            // entity DEBE venir trackeado 
+            // Igual se reestablece 
+            if (_context.Entry(entity).State == EntityState.Detached) //Detached no sabe si es nuevo o existente, pero se asume existente porque viene con Id
+            {
+                _context.Attach(entity);
+            }
+
+            // Si el mapping ya actualizó propiedades escalares, esto garantiza update 
+            _context.Entry(entity).State = EntityState.Modified;
+
+            // Si por alguna razón la navigation del autor viene nula: 
+            // (No es obligatorio para guardar FK) 
+            //if (entity.IdAutorNavigation == null && entity.IdAutor > 0)
+            //{
+            //    var autor = await _context.Autor.FindAsync(entity.IdAutor);
+
+            //    if (autor != null)
+            //    {
+            //        entity.IdAutorNavigation = autor;
+            //    }
+            //}
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace Subasta.Aplication.Services.Interfaces
     {
         Task<ICollection<UsuarioDTO>> ListAsync();
         Task<UsuarioDTO?> FindByIdAsync(int id);
+
+        Task UpdateAsync(int id, UsuarioDTO dto);
     }
 }

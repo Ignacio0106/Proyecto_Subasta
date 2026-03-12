@@ -55,5 +55,19 @@ namespace Subasta.Aplication.Services.Implementations
             var list = await _repository.ListAsync();
             return _mapper.Map<ICollection<UsuarioDTO>>(list);
         }
+
+        public async Task UpdateAsync(int id, UsuarioDTO dto)
+        {
+            // Traer entity (idealmente trackeado) antes de mapear encima 
+            var usuario = await _repository.FindByIdAsync(id);
+
+            if (usuario == null)
+                throw new KeyNotFoundException($"No existe el usuario con id= {id} ");
+
+            // Map "sobre" el entity existente (mantiene tracking) 
+            _mapper.Map(dto, usuario);
+
+            await _repository.UpdateAsync(usuario);
+        }
     }
 }

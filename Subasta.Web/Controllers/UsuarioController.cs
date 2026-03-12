@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Subasta.Aplication.DTOs;
 using Subasta.Aplication.Services.Interfaces;
 using Subasta.Web.Helpers;
 
@@ -51,6 +52,52 @@ namespace Subasta.Web.Controllers
             );
 
             return View(usuario);
+        }
+
+        // GET: LibroController/Edit/5
+        public async Task<ActionResult> Edit(int id)
+        {
+            var dto = await _serviceUsuario.FindByIdAsync(id);
+
+            //var selected = dto.IdCategoria
+            //    .Select(c => c.IdCategoria.ToString())
+            //    .ToList();
+
+            //await LoadCombosAsync(selected);
+            return View(dto);
+        }
+
+        // POST: LibroController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(int id, UsuarioDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Recopilar todos los errores del ModelState
+                var errores = string.Join("<br>",
+                    ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                );
+
+                // Notificación SweetAlert con el detalle de errores
+                ViewBag.Notificacion = SweetAlertHelper.CrearNotificacion(
+                    "Errores de validación",
+                    $"El formulario contiene errores:<br>{errores}",
+                    SweetAlertMessageType.warning
+                );
+                return View(dto);
+            }
+
+            await _serviceUsuario.UpdateAsync(id, dto);
+            //Notificar creación
+            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                  "Usuario actualizado",
+                  $"El usuario {dto.NombreCompleto} ha sido modificado exitosamente.",
+                  SweetAlertMessageType.success
+              );
+            return RedirectToAction(nameof(Index));
         }
     }
 }
