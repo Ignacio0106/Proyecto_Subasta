@@ -13,5 +13,6 @@ namespace Subasta.Aplication.Services.Interfaces
         Task<UsuarioDTO?> FindByIdAsync(int id);
 
         Task UpdateAsync(int id, UsuarioDTO dto);
+        Task ToggleEstadoAsync(int id);
     }
 }

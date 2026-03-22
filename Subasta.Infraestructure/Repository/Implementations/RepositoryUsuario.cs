@@ -41,27 +41,23 @@ namespace Subasta.Infraestructure.Repository.Implementations
 
         public async Task UpdateAsync(Usuario entity)
         {
-            // entity DEBE venir trackeado 
-            // Igual se reestablece 
-            if (_context.Entry(entity).State == EntityState.Detached) //Detached no sabe si es nuevo o existente, pero se asume existente porque viene con Id
-            {
-                _context.Attach(entity);
-            }
+            var usuarioBD = await _context.Usuario.FindAsync(entity.IdUsuario);
 
-            // Si el mapping ya actualizó propiedades escalares, esto garantiza update 
-            _context.Entry(entity).State = EntityState.Modified;
+            if (usuarioBD == null)
+                throw new Exception("Usuario no encontrado");
+            usuarioBD.NombreCompleto = entity.NombreCompleto;
+            usuarioBD.CorreoElectronico = entity.CorreoElectronico;
 
-            // Si por alguna razón la navigation del autor viene nula: 
-            // (No es obligatorio para guardar FK) 
-            //if (entity.IdAutorNavigation == null && entity.IdAutor > 0)
-            //{
-            //    var autor = await _context.Autor.FindAsync(entity.IdAutor);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UpdateEstadoAsync(Usuario entity)
+        {
+            var usuarioBD = await _context.Usuario.FindAsync(entity.IdUsuario);
 
-            //    if (autor != null)
-            //    {
-            //        entity.IdAutorNavigation = autor;
-            //    }
-            //}
+            if (usuarioBD == null)
+                throw new Exception("Usuario no encontrado");
+
+            usuarioBD.IdEstado = entity.IdEstado;
 
             await _context.SaveChangesAsync();
         }

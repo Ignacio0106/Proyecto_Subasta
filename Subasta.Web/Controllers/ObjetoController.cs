@@ -246,5 +246,7 @@ namespace Subasta.Web.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
     }
 }

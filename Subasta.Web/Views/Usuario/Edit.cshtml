@@ -1,80 +1,84 @@
 ﻿@model Subasta.Aplication.DTOs.UsuarioDTO
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Perfil";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5">
 
-<h4>UsuarioDTO</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="IdUsuario" class="control-label"></label>
-                <input asp-for="IdUsuario" class="form-control" />
-                <span asp-validation-for="IdUsuario" class="text-danger"></span>
+    <h3 class="fw-bold mb-3">Editar Perfil</h3>
+    <p class="text-muted mb-4">Solo puedes modificar tu nombre y correo electrónico.</p>
+
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="IdUsuario" />
+
+        <div class="row g-4">
+
+            <!-- 🔹 IZQUIERDA (NO EDITABLE - SIMPLE) -->
+            <div class="col-md-5">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+
+                        <h5 class="fw-semibold mb-3 text-muted">Información</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Rol</label>
+                            <input class="form-control" value="@Model.Rol" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Estado</label>
+                            <input class="form-control" value="@Model.Estado" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Fecha de registro</label>
+                            <input class="form-control"
+                                   value="@Model.FechaRegistro.ToString("dd/MM/yyyy")"
+                                   disabled />
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CorreoElectronico" class="control-label"></label>
-                <input asp-for="CorreoElectronico" class="form-control" />
-                <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+
+            <!-- 🔹 DERECHA (EDITABLE) -->
+            <div class="col-md-7">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+
+                        <h5 class="fw-semibold mb-3">Datos editables</h5>
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="NombreCompleto" class="form-label fw-semibold"></label>
+                            <input asp-for="NombreCompleto" class="form-control" />
+                            <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CorreoElectronico" class="form-label fw-semibold"></label>
+                            <input asp-for="CorreoElectronico" type="email" class="form-control" />
+                            <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+
+                            <button type="submit" class="btn btn-primary">
+                                Guardar cambios
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Contrasenna" class="control-label"></label>
-                <input asp-for="Contrasenna" class="form-control" />
-                <span asp-validation-for="Contrasenna" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NombreCompleto" class="control-label"></label>
-                <input asp-for="NombreCompleto" class="form-control" />
-                <span asp-validation-for="NombreCompleto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdRol" class="control-label"></label>
-                <input asp-for="IdRol" class="form-control" />
-                <span asp-validation-for="IdRol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdEstado" class="control-label"></label>
-                <input asp-for="IdEstado" class="form-control" />
-                <span asp-validation-for="IdEstado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Rol" class="control-label"></label>
-                <input asp-for="Rol" class="form-control" />
-                <span asp-validation-for="Rol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CantidadSubastas" class="control-label"></label>
-                <input asp-for="CantidadSubastas" class="form-control" />
-                <span asp-validation-for="CantidadSubastas" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CantidadPujas" class="control-label"></label>
-                <input asp-for="CantidadPujas" class="form-control" />
-                <span asp-validation-for="CantidadPujas" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+        </div>
+
+    </form>
+
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

@@ -14,5 +14,6 @@ namespace Subasta.Infraestructure.Repository.Interfaces
         Task<Usuario?> FindByIdAsync(int id);
 
         Task UpdateAsync(Usuario entity);
+        Task UpdateEstadoAsync(Usuario entity);
     }
 }

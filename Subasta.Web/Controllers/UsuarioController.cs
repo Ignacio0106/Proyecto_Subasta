@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using Subasta.Aplication.DTOs;
 using Subasta.Aplication.Services.Interfaces;
 using Subasta.Web.Helpers;
@@ -74,29 +75,23 @@ namespace Subasta.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Recopilar todos los errores del ModelState
-                var errores = string.Join("<br>",
-                    ModelState.Values
-                        .SelectMany(v => v.Errors)
-                        .Select(e => e.ErrorMessage)
-                );
-
-                // Notificación SweetAlert con el detalle de errores
-                ViewBag.Notificacion = SweetAlertHelper.CrearNotificacion(
-                    "Errores de validación",
-                    $"El formulario contiene errores:<br>{errores}",
-                    SweetAlertMessageType.warning
-                );
                 return View(dto);
             }
 
             await _serviceUsuario.UpdateAsync(id, dto);
-            //Notificar creación
-            TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
-                  "Usuario actualizado",
-                  $"El usuario {dto.NombreCompleto} ha sido modificado exitosamente.",
-                  SweetAlertMessageType.success
-              );
+
+            TempData["Mensaje"] = $"El usuario {dto.NombreCompleto} fue actualizado correctamente.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleEstado(int id)
+        {
+            await _serviceUsuario.ToggleEstadoAsync(id);
+
+            TempData["Mensaje"] = "Estado actualizado correctamente.";
+
             return RedirectToAction(nameof(Index));
         }
     }
