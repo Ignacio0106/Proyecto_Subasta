@@ -19,17 +19,20 @@ namespace Subasta.Infraestructure.Repository.Implementations
             _context = context;
         }
 
-        public Task<Categoria> FindByIdAsync(int id)
+        public async Task<Categoria?> FindByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<Categoria>()
+               .AsNoTracking()
+               .FirstOrDefaultAsync(a => a.IdCategoria == id);
         }
 
         public async Task<ICollection<Categoria>> ListAsync()
         {
+            //Select * from Categoria
             var collection = await _context.Set<Categoria>()
                 .AsNoTracking()
                 .ToListAsync();
-
+            //throw new Exception("Error de prueba en RepositoryCategoria.ListAsync");
             return collection;
         }
 

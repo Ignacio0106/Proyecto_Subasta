@@ -99,6 +99,11 @@ builder.Services.AddScoped<IRepositoryPuja, RepositoryPuja>();
 builder.Services.AddTransient<IServiceObjeto, ServiceObjeto>();
 builder.Services.AddScoped<IRepositoryObjeto, RepositoryObjeto>();
 
+builder.Services.AddTransient<IServiceCategoria, ServiceCategoria>();
+builder.Services.AddScoped<IRepositoryCategoria, RepositoryCategoria>();
+
+builder.Services.AddTransient<IServiceCondicion, ServiceCondicion>();
+builder.Services.AddScoped<IRepositoryCondicion, RepositoryCondicion>();
 
 // ======================= 
 // Configurar AutoMapper 
@@ -110,6 +115,8 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<SubastaProfile>();
     config.AddProfile<PujaProfile>();
     config.AddProfile<ObjetoProfile>();
+    config.AddProfile<CategoriaProfile>();
+    config.AddProfile<CondicionProfile>();
 });
 
 // ======================= 

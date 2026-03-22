@@ -172,8 +172,21 @@
 
     </div>
 </div>
-<div class="mt-3">
+<div class="mt-4 d-flex gap-2">
+
     <a asp-action="Index" class="btn btn-outline-dark">
-        <i class="bi bi-arrow-left me-1"></i>Volver al listado
+        <i class="bi bi-arrow-left me-1"></i> Volver
     </a>
+
+    @if (Model.HistorialSubastas == null ||
+    !Model.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa"))
+    {
+        <a asp-controller="Objeto"
+           asp-action="Edit"
+           asp-route-id="@Model.IdObjeto"
+           class="btn btn-warning btn-sm">
+            <i class="bi bi-pencil-square me-1"></i> Editar
+        </a>
+    }
+
 </div>

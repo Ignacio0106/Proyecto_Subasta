@@ -1,0 +1,282 @@
+﻿@model Subasta.Aplication.DTOs.ObjetoDTO
+
+@{
+    ViewData["Title"] = "Editar objeto";
+}
+
+<div class="container py-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <!-- Header -->
+            <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+                <div class="bg-warning text-white rounded-circle p-3 me-3">
+                    <i class="bi bi-pencil-square fs-3"></i>
+                </div>
+                <div>
+                    <h1 class="h3 mb-0 text-dark">Editar Objeto</h1>
+                    <p class="text-muted mb-0">Modifique los datos del objeto</p>
+                </div>
+            </div>
+
+            <!-- 🔥 FORM -->
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+                <!-- ✅ ID OCULTO (CRÍTICO) -->
+                <input type="hidden" asp-for="IdObjeto" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="row g-4">
+
+                    <!-- IZQUIERDA -->
+                    <div class="col-md-7">
+
+                        <!-- Info sistema -->
+                        <div class="card shadow-sm mb-4 border-0">
+                            <div class="card-header bg-light fw-bold text-uppercase small text-muted">
+                                <i class="bi bi-person-check me-1"></i> Información del sistema
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold text-muted">Usuario vendedor</label>
+                                    <input type="text"
+                                           class="form-control bg-light"
+                                           value="@Model.Vendedor"
+                                           readonly />
+                                </div>
+
+                                <div class="mb-0">
+                                    <label class="form-label fw-semibold text-muted">Estado</label>
+                                    <input type="text"
+                                           class="form-control bg-light"
+                                           value="@Model.Estado"
+                                           readonly />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info general -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-transparent fw-bold text-uppercase small text-muted">
+                                <i class="bi bi-info-circle me-1"></i> Información General
+                            </div>
+                            <div class="card-body px-4 py-3">
+                                <div class="mb-3">
+                                    <label asp-for="Nombre" class="form-label fw-semibold"></label>
+                                    <input asp-for="Nombre" class="form-control" />
+                                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Descripcion" class="form-label fw-semibold"></label>
+                                    <textarea asp-for="Descripcion" class="form-control" rows="6"></textarea>
+                                    <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- DERECHA -->
+                    <div class="col-md-5">
+
+                        <!-- Clasificación -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-transparent fw-bold text-uppercase small text-muted">
+                                <i class="bi bi-tags me-1"></i> Clasificación
+                            </div>
+                            <div class="card-body">
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Condición</label>
+                                    <select asp-for="IdCondicion"
+                                            class="form-select"
+                                            asp-items="@(new SelectList(ViewBag.ListCondicion,"IdCondicion","Descripcion", Model.IdCondicion))">
+                                    </select>
+                                    <span asp-validation-for="IdCondicion" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-0">
+                                    <label class="form-label fw-semibold">Categorías</label>
+                                    <select id="selectedCategorias"
+                                            name="selectedCategorias"
+                                            class="form-select"
+                                            asp-items="ViewBag.ListCategorias"
+                                            multiple>
+                                    </select>
+
+                                    @if (ViewData.ModelState["selectedCategorias"]?.Errors.Count > 0)
+                                    {
+                                        <span class="text-danger small d-block mt-1">
+                                            @ViewData.ModelState["selectedCategorias"].Errors[0].ErrorMessage
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Multimedia -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-transparent fw-bold text-uppercase small text-muted">
+                                <i class="bi bi-camera me-1"></i> Multimedia
+                            </div>
+
+                            <div class="card-body">
+
+                                <label class="form-label fw-semibold">Imágenes actuales</label>
+
+                                <!-- ✅ VALIDACIÓN -->
+                                @if (ViewData.ModelState.ContainsKey("Imagenes"))
+                                {
+                                    <span class="text-danger small d-block mb-2">
+                                        @ViewData.ModelState["Imagenes"].Errors.FirstOrDefault()?.ErrorMessage
+                                    </span>
+                                }
+
+                                <div class="row g-2">
+
+                                    @if (Model.Imagenes != null && Model.Imagenes.Count > 0)
+                                    {
+                                        for (int i = 0; i < Model.Imagenes.Count; i++)
+                                        {
+                                            <div class="col-4">
+                                                <div class="position-relative border rounded overflow-hidden">
+
+                                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagenes[i])"
+                                                         style="height:120px; object-fit:cover; width:100%;" />
+
+                                                    <!-- ❌ BOTÓN BONITO -->
+                                                    <button type="button"
+                                                            class="btn btn-light btn-sm position-absolute top-0 end-0 m-1 btn-eliminar shadow-sm"
+                                                            style="background: rgba(255,255,255,0.8);">
+                                                        <i class="bi bi-x-lg text-dark"></i>
+                                                    </button>
+
+                                                    <input type="hidden"
+                                                           name="imagenesAEliminar"
+                                                           value="@Model.ImagenesIds[i]"
+                                                           class="input-eliminar"
+                                                           disabled />
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted small">No hay imágenes</p>
+                                    }
+
+                                </div>
+
+                                <hr />
+
+                                <label class="form-label fw-semibold">Agregar nuevas imágenes</label>
+
+                                <input type="file"
+                                       id="nuevasImagenes"
+                                       name="nuevasImagenes"
+                                       class="form-control mb-3"
+                                       accept="image/*"
+                                       multiple />
+
+                                <div id="previewNuevas" class="row g-2"></div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- BOTONES -->
+
+                    <div class="col-12 mt-4 border-top pt-4">
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a asp-action="Index" class="btn btn-light px-4 border">
+                                <i class="bi bi-arrow-left me-1"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-warning px-5 shadow">
+                                <i class="bi bi-save me-1"></i> Actualizar
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // eliminar imagen
+        document.addEventListener("click", function (e) {
+            if (e.target.closest(".btn-eliminar")) {
+
+                const btn = e.target.closest(".btn-eliminar");
+                const container = btn.closest('.col-4');
+                const inputHidden = container.querySelector('.input-eliminar');
+
+                inputHidden.disabled = false;
+                container.style.opacity = "0.3";
+
+                btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+                btn.classList.remove("btn-light");
+                btn.classList.add("btn-secondary");
+            }
+        });
+
+        // preview nuevas imágenes
+        const inputFile = document.getElementById('nuevasImagenes');
+        const preview = document.getElementById('previewNuevas');
+
+        inputFile.addEventListener('change', function () {
+            preview.innerHTML = "";
+
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const col = document.createElement("div");
+                    col.className = "col-4";
+
+                    col.innerHTML = `
+                        <div class="border rounded overflow-hidden">
+                            <img src="${e.target.result}"
+                                 style="height:120px; object-fit:cover; width:100%;" />
+                        </div>
+                    `;
+
+                    preview.appendChild(col);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+
+    <script>
+
+
+        $(document).ready(function () {
+             if ($.fn.multiselect) {
+                 $('#selectedCategorias').multiselect({
+                     buttonClass: 'form-select',
+                     templates: {
+                         button: '<button type="button" class="multiselect dropdown-toggle" data-bs-toggle="dropdown"><span class="multiselect-selected-text"></span></button>',
+                     },
+                     includeSelectAllOption: true,
+                     selectAllText: 'Seleccionar todas',
+                     allSelectedText: 'Todas las opciones',
+                     nonSelectedText: 'Seleccione una opción',
+                     nSelectedText: ' - seleccionadas',
+                 });
+             }
+         });
+
+    </script>
+
+}

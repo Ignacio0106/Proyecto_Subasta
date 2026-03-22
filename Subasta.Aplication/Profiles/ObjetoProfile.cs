@@ -22,12 +22,14 @@ namespace Subasta.Aplication.Profiles
 
             // DTO → ENTIDAD (si algún día lo usas para crear)
             CreateMap<ObjetoDTO, Objeto>()
-                .ForMember(d => d.IdUsuarioVendedorNavigation, o => o.Ignore())
-                .ForMember(d => d.IdEstadoNavigation, o => o.Ignore())
-                .ForMember(d => d.IdCondicionNavigation, o => o.Ignore())
-                .ForMember(d => d.ImagenObjeto, o => o.Ignore())
-                .ForMember(d => d.Subasta, o => o.Ignore())
-                .ForMember(d => d.IdCategoria, o => o.Ignore());
+    .ForMember(d => d.IdUsuarioVendedorNavigation, o => o.Ignore())
+    .ForMember(d => d.IdEstadoNavigation, o => o.Ignore())
+    .ForMember(d => d.IdCondicionNavigation, o => o.Ignore())
+    .ForMember(d => d.ImagenObjeto, o => o.Ignore())
+    .ForMember(d => d.Subasta, o => o.Ignore())
+    .ForMember(d => d.IdCategoria, o => o.Ignore())
+    .ForMember(d => d.FechaRegistro, o => o.Ignore())
+    .ForMember(dest => dest.IdObjeto, opt => opt.Ignore());
         }
     }
 }

@@ -21,9 +21,11 @@ namespace Subasta.Aplication.Services.Implementations
             _mapper = mapper;
         }
 
-        public Task<CategoriaDTO?> FindByIdAsync(int id)
+        public async Task<CategoriaDTO?> FindByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var @object = await _repository.FindByIdAsync(id);
+            var objectMapped = _mapper.Map<CategoriaDTO>(@object);
+            return objectMapped;
         }
 
         public async Task<ICollection<CategoriaDTO>> ListAsync()

@@ -5,8 +5,17 @@
     var total = Model?.Count() ?? 0;
 }
 
-<h1 class="h3 mb-3">Listado de Objetos</h1>
-<p class="text-muted mb-4">Total de objetos: <strong>@total</strong></p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="h3 mb-0">Listado de Objetos</h1>
+        <p class="text-muted mb-0">Total de objetos: <strong>@total</strong></p>
+    </div>
+
+    <a asp-action="Create" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-circle me-1"></i>
+        Nuevo Objeto
+    </a>
+</div>
 
 @if (Model == null || !Model.Any())
 {
@@ -69,23 +78,69 @@ else
 
                     <!-- Acciones -->
                     <div class="card-footer bg-body border-0 pt-0 pb-3">
-                        <div class="d-grid px-2">
+                        <div class="d-flex w-100 gap-2">
+
+                            <!-- Ver detalle -->
                             <a asp-controller="Objeto"
                                asp-action="Details"
                                asp-route-id="@item.IdObjeto"
-                               class="btn btn-primary btn-sm">
-                                <i class="bi bi-eye me-1"></i> Ver detalle
+                               class="btn btn-primary flex-fill d-flex align-items-center justify-content-center">
+                                <i class="bi bi-eye"></i>
                             </a>
+
+                            @if (item.HistorialSubastas == null ||
+                           !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa"))
+                            {
+                                <!-- Editar -->
+                                <a asp-controller="Objeto"
+                                   asp-action="Edit"
+                                   asp-route-id="@item.IdObjeto"
+                                   class="btn btn-warning flex-fill d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                            }
+
+                            <!-- Switch -->
+                            <form asp-controller="Objeto" asp-action="ToggleEstado" method="post" class="flex-fill d-flex justify-content-center align-items-center">
+                                <input type="hidden" name="id" value="@item.IdObjeto" />
+
+                                <label class="switch m-0">
+                                    <input type="checkbox"
+                                           onchange="confirmarCambio(this)"
+                                    @(item.Estado == "Activo" ? "checked" : "")>
+                                    <span class="slider"></span>
+                                </label>
+                            </form>
+
                         </div>
                     </div>
-                </div>
+                 </div>
             </div>
         }
     </div>
 }
 
 @section Scripts {
+
+    @if (TempData["Mensaje"] != null)
+    {
+        var mensaje = TempData["Mensaje"].ToString();
+
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '@mensaje',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    }
+
     <style>
+        .card-footer .btn {
+            border-radius: 10px;
+            height: 45px;
+            font-size: 18px;
+        }
         .card:hover {
             transform: translateY(-3px);
             transition: transform 0.18s ease;
@@ -94,5 +149,76 @@ else
         .object-fit-cover {
             object-fit: cover;
         }
+
+        /* 🔥 SWITCH BONITO */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 55px;
+            height: 30px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            background-color: #ccc;
+            border-radius: 34px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transition: 0.4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 22px;
+                width: 22px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                border-radius: 50%;
+                transition: 0.4s;
+            }
+
+        input:checked + .slider {
+            background-color: #198754; /* verde */
+        }
+
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
     </style>
+
+    <script>
+        function confirmarCambio(elemento) {
+
+            let activar = elemento.checked;
+
+            Swal.fire({
+                title: activar ? "¿Activar objeto?" : "¿Desactivar objeto?",
+                text: activar
+                    ? "El objeto estará disponible."
+                    : "El objeto dejará de estar disponible.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, continuar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    elemento.form.submit();
+                } else {
+                    elemento.checked = !elemento.checked;
+                }
+            });
+        }
+    </script>
 }
