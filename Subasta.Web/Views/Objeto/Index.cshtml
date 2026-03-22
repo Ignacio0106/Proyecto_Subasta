@@ -101,16 +101,20 @@ else
                             }
 
                             <!-- Switch -->
-                            <form asp-controller="Objeto" asp-action="ToggleEstado" method="post" class="flex-fill d-flex justify-content-center align-items-center">
-                                <input type="hidden" name="id" value="@item.IdObjeto" />
+                            @if (item.HistorialSubastas == null ||
+                           !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa") && !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Finalizada"))
+                            {
+                                <form asp-controller="Objeto" asp-action="ToggleEstado" method="post" class="flex-fill d-flex justify-content-center align-items-center m-0">
+                                    <input type="hidden" name="id" value="@item.IdObjeto" />
 
-                                <label class="switch m-0">
-                                    <input type="checkbox"
-                                           onchange="confirmarCambio(this)"
-                                    @(item.Estado == "Activo" ? "checked" : "")>
-                                    <span class="slider"></span>
-                                </label>
-                            </form>
+                                    <label class="switch m-0">
+                                        <input type="checkbox"
+                                               onchange="confirmarCambio(this)"
+                                        @(item.Estado == "Activo" ? "checked" : "")>
+                                        <span class="slider"></span>
+                                    </label>
+                                </form>
+                            }
 
                         </div>
                     </div>
