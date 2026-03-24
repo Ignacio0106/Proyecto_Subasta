@@ -133,12 +133,13 @@
                                 }
 
                                 <div class="preview-container bg-light rounded border p-2">
-                                    <img id="previewImage"
-                                         class="img-fluid rounded d-none"
-                                         style="max-height:180px;" />
-                                    <p id="previewPlaceholder" class="text-muted small mb-0 py-4">
-                                        No hay imagen seleccionada
+
+                                    <div id="previewGrid" class="row g-2"></div>
+
+                                    <p id="previewPlaceholder" class="text-muted small mb-0 py-4 text-center">
+                                        No hay imágenes seleccionadas
                                     </p>
+
                                 </div>
                             </div>
                         </div>
@@ -166,24 +167,42 @@
 
 @section Scripts {
 
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" /> 
 
     <script>
-        const input = document.getElementById('imageFiles');
-        const preview = document.getElementById('previewImage');
+                const input = document.getElementById('imageFiles');
+        const previewGrid = document.getElementById('previewGrid');
         const placeholder = document.getElementById('previewPlaceholder');
 
-        input?.addEventListener('change', () => {
-            const file = input.files && input.files[0];
-            if (!file) {
-                preview.classList.add('d-none');
+        input.addEventListener('change', function () {
+            previewGrid.innerHTML = "";
+
+            if (this.files.length === 0) {
                 placeholder.classList.remove('d-none');
-                preview.src = '';
                 return;
             }
-            preview.src = URL.createObjectURL(file);
-            preview.classList.remove('d-none');
+
             placeholder.classList.add('d-none');
+
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const col = document.createElement("div");
+                    col.className = "col-4";
+
+                    col.innerHTML = `
+                        <div class="border rounded overflow-hidden">
+                            <img src="${e.target.result}"
+                                 style="height:120px; object-fit:cover; width:100%;" />
+                        </div>
+                    `;
+
+                    previewGrid.appendChild(col);
+                };
+
+                reader.readAsDataURL(file);
+            });
         });
 
         $(document).ready(function () {

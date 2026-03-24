@@ -1,13 +1,14 @@
-﻿using System;
+﻿using AutoMapper;
+using Subasta.Aplication.DTOs;
+using Subasta.Aplication.Services.Interfaces;
+using Subasta.Infraestructure.Models;
+using Subasta.Infraestructure.Repository.Implementations;
+using Subasta.Infraestructure.Repository.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-using Subasta.Aplication.DTOs;
-using Subasta.Aplication.Services.Interfaces;
-using Subasta.Infraestructure.Models;
-using Subasta.Infraestructure.Repository.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Subasta.Aplication.Services.Implementations
@@ -16,6 +17,8 @@ namespace Subasta.Aplication.Services.Implementations
     {
         private readonly IRepositoryObjeto _repository;
         private readonly IMapper _mapper;
+
+        private readonly IServiceSubasta _serviceSubasta;
 
         public ServiceObjeto(IRepositoryObjeto repository, IMapper mapper)
         {
@@ -54,6 +57,14 @@ namespace Subasta.Aplication.Services.Implementations
           var list = await _repository.ListAsync();
           return _mapper.Map<ICollection<ObjetoDTO>>(list);
 
+        }
+        public async Task<ICollection<ObjetoDTO>> ListActivas()
+        {
+            var all = await _repository.ListAsync();
+
+            var activos = all.Where(s => s.IdEstado == 1);
+
+            return _mapper.Map<ICollection<ObjetoDTO>>(all);
         }
 
         public async Task<int> AddAsync(ObjetoDTO dto, string[] selectedCategorias, int idUsuario)

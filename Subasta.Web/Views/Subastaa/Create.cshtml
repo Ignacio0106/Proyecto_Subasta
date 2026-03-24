@@ -1,0 +1,119 @@
+﻿@model Subasta.Aplication.DTOs.SubastaDTO
+
+@{
+    ViewData["Title"] = "Crear Subasta";
+}
+
+<h1 class="mb-4">Crear Nueva Subasta</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white fw-semibold">
+                Información de la Subasta
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Create">
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <!-- OBJETO (LISTA) -->
+                    <div class="mb-3">
+                        <label asp-for="IdObjeto" class="form-label fw-semibold"></label>
+                        <select asp-for="IdObjeto"
+                                class="form-select border-primary-subtle shadow-none"
+                                asp-items="@(new SelectList(ViewBag.ListObjetos, "IdObjeto", "Nombre"))">
+                            <option value="" disabled selected>Selecciona una condición</option>
+                        </select>
+                        <span asp-validation-for="IdObjeto" class="text-danger"></span>
+                    </div>
+
+                    <hr />
+
+                    <!-- FECHAS -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="FechaHoraInicio" class="form-label fw-semibold"></label>
+                            <input asp-for="FechaHoraInicio" type="datetime-local" class="form-control" id="fechaInicio" value="@DateTime.Today.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                            <span asp-validation-for="FechaHoraInicio" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="FechaHoraCierre" class="form-label fw-semibold"></label>
+                            <input asp-for="FechaHoraCierre" type="datetime-local" class="form-control" id="fechaCierre" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="FechaHoraCierre" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- PRECIOS -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="PrecioBase" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <input asp-for="PrecioBase" class="form-control" placeholder="0.00" />
+                            </div>
+                            <span asp-validation-for="PrecioBase" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="IncrementoMinimo" class="form-label fw-semibold"></label>
+                            <div class="input-group">
+                                <input asp-for="IncrementoMinimo" class="form-control" />
+                            </div>
+                            <span asp-validation-for="IncrementoMinimo" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- USUARIO (NO EDITABLE) -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Usuario Vendedor</label>
+                        <input type="text" class="form-control" value="@ViewBag.UsuarioActual" disabled />
+                    </div>
+
+                    <!-- HIDDEN para enviar el usuario -->
+                    <input type="hidden" asp-for="UsuarioCreador" value="@ViewBag.UsuarioActual" />
+                    <input type="hidden" asp-for="EstadoSubasta"
+                               value="@(ViewBag.Estado ?? "Activo")" />
+                    <hr />
+
+                    <!-- BOTONES -->
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver
+                        </a>
+
+                        <button type="submit" name="estado" value=1 class="btn btn-primary px-4">
+                            Publicar Subasta
+                        </button>
+
+                        <button type="submit" name="estado" value=4 class="btn btn-secondary px-4">
+                            Guardar como borrador
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const fechaInicio = document.getElementById("fechaInicio");
+        const fechaCierre = document.getElementById("fechaCierre");
+
+        fechaInicio.addEventListener("change", function () {
+            fechaCierre.min = this.value;
+        });
+    </script>
+}

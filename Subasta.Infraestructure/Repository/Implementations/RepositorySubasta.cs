@@ -10,7 +10,7 @@ using Subasta.Infraestructure.Repository.Interfaces;
 
 namespace Subasta.Infraestructure.Repository.Implementations
 {
-    public class RepositorySubasta: IRepositorySubasta
+    public class RepositorySubasta : IRepositorySubasta
     {
         private readonly SubastaContext _context;
 
@@ -39,14 +39,48 @@ namespace Subasta.Infraestructure.Repository.Implementations
         public async Task<ICollection<Subastaa>> ListAsync()
         {
             return await _context.Subasta
-        .Include(s => s.IdUsuarioCreadorNavigation)      
-        .Include(s => s.Puja)                 
+        .Include(s => s.IdUsuarioCreadorNavigation)
+        .Include(s => s.Puja)
         .Include(s => s.IdObjetoNavigation)
         .ThenInclude(o => o.ImagenObjeto)
-        .Include(s => s.IdEstadoSubastaNavigation)   
+        .Include(s => s.IdEstadoSubastaNavigation)
         .AsNoTracking()
         .ToListAsync();
         }
 
+        public async Task<int> AddAsync(Subastaa entity)
+        {
+            await _context.Set<Subastaa>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return entity.IdSubasta;
+        }
+
+        public async Task UpdateAsync(Subastaa entity)
+        {
+            // entity DEBE venir trackeado
+            // Igual se reestablece
+            if (_context.Entry(entity).State == EntityState.Detached)
+            {
+                _context.Attach(entity);
+            }
+
+            // Si el mapping ya actualizó propiedades escalares, esto garantiza update
+            _context.Entry(entity).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateEstadoAsync(Subastaa entity)
+        {
+            var subastaBD = await _context.Subasta.FindAsync(entity.IdSubasta);
+
+            if (subastaBD == null)
+                throw new Exception("Subasta no encontrado");
+
+            subastaBD.IdEstadoSubasta = entity.IdEstadoSubasta;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

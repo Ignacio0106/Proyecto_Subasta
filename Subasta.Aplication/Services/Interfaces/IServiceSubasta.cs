@@ -9,8 +9,15 @@ namespace Subasta.Aplication.Services.Interfaces
 {
     public interface IServiceSubasta
     {
+        Task<ICollection<SubastaDTO>> ListAsync();
         Task<ICollection<SubastaDTO>> ListActivas();
         Task<ICollection<SubastaDTO>> ListFinalizadas();
         Task<SubastaDTO?> FindByIdAsync(int id);
+
+        Task<int> AddAsync(SubastaDTO dto, int idUsuario, int idEstado);
+
+        Task UpdateAsync(int id, SubastaDTO dto);
+
+        Task ToggleEstadoAsync(int id);
     }
 }

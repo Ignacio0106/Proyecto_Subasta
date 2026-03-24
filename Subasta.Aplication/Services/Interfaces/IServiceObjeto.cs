@@ -12,6 +12,7 @@ namespace Subasta.Aplication.Services.Interfaces
     public interface IServiceObjeto
     {
         Task<ICollection<ObjetoDTO>> ListAsync();
+        Task<ICollection<ObjetoDTO>> ListActivas();
         Task<ObjetoDTO?> FindByIdAsync(int id);
         Task<int> AddAsync(ObjetoDTO dto, string[] selectedCategorias, int idUsuario);
         Task UpdateAsync(int id, ObjetoDTO dto, string[] selectedCategorias, string[] imagenesAEliminar,
