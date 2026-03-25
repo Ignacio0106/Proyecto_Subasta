@@ -88,8 +88,7 @@ else
                                 <i class="bi bi-eye"></i>
                             </a>
 
-                            @if (item.HistorialSubastas == null ||
-                           !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa"))
+                            @if (item.Estado == "Activo" &&(item.HistorialSubastas == null ||!item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa")))
                             {
                                 <!-- Editar -->
                                 <a asp-controller="Objeto"
