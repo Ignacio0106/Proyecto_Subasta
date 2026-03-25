@@ -12,6 +12,7 @@ namespace Subasta.Aplication.Services.Interfaces
         Task<ICollection<SubastaDTO>> ListAsync();
         Task<ICollection<SubastaDTO>> ListActivas();
         Task<ICollection<SubastaDTO>> ListFinalizadas();
+        Task<ICollection<SubastaDTO>> ListBorradores();
         Task<SubastaDTO?> FindByIdAsync(int id);
 
         Task<int> AddAsync(SubastaDTO dto, int idUsuario, int idEstado);

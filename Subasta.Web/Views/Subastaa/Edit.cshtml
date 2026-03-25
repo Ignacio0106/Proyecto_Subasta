@@ -146,7 +146,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <input type="hidden" asp-for="IdObjeto" />
                     @if (!bloqueada)
                     {
                         <button type="submit" class="btn btn-success">
@@ -175,6 +175,14 @@
 
         fechaInicio.addEventListener("change", function () {
             fechaCierre.min = this.value;
+
+            if (!fechaCierre.value || fechaCierre.value < this.value) {
+                fechaCierre.value = this.value;
+        }
         });
+        // fechaCierre.addEventListener("change", function () {
+        //     if (!fechaCierre.value || fechaCierre.value < this.value) {
+        //         fechaCierre.value = this.value;
+        // }
     </script>
 }

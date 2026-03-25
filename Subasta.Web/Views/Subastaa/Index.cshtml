@@ -8,14 +8,6 @@
 
     <h1 class="mb-4">Subastas</h1>
 
-    <div class="d-flex gap-2">
-
-        <button id="btnTodas" class="btn btn-outline-dark">Todas</button>
-        <button id="btnActivas" class="btn btn-outline-success">Activas</button>
-        <button id="btnFinalizadas" class="btn btn-outline-danger">Finalizadas</button>
-
-    </div>
-
     <a asp-action="Create" class="btn btn-primary shadow-sm">
         <i class="bi bi-plus-circle me-1"></i>
         Nueva subasta
@@ -23,10 +15,7 @@
 </div>
 
 <div class="container">
-    <div class="row g-4" id="contenedorSubastas">
-@*         <script>
-            const subastas = @Html.Raw(Json.Serialize(Model));
-        </script> *@
+    <div class="row g-4">
 
         @foreach (var item in Model)
         {
@@ -89,9 +78,7 @@
                                 }
 
                                 <!-- Switch -->
-                                @* @if (item.EstadoSubasta != "Activa" || item.FechaHoraInicio > DateTime.Now) *@
-                                @if (item.FechaHoraInicio > DateTime.Now)
-                                //!item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa") && !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Finalizada"))
+                                @if (item.CantidadPujas == 0 && item.FechaHoraInicio > DateTime.Now)
                                 {
                                     <form asp-controller="Subastaa" asp-action="ToggleEstado" method="post" class="flex-fill d-flex justify-content-center align-items-center m-0">
                                         <input type="hidden" name="id" value="@item.IdSubasta" />
@@ -107,13 +94,6 @@
 
                             </div>
                         </div>
-            @*             <div class="mt-auto">
-                            <a asp-action="Details" asp-route-id="@item.IdSubasta"
-                               class="btn btn-primary w-100">
-                                Ver Detalles
-                            </a>
-                        </div> *@
-
                     </div>
                 </div>
             </div>
@@ -193,7 +173,7 @@
             }
 
         input:checked + .slider {
-            background-color: #198754; /* verde */
+            background-color: #198754; 
         }
 
             input:checked + .slider:before {
@@ -226,111 +206,5 @@
         }
     </script>
 
-    <script>
-                function renderSubastas(lista) {
-            const contenedor = document.getElementById("contenedorSubastas");
-            contenedor.innerHTML = "";
-
-            lista.forEach(item => {
-
-                const imagen = item.imagenPrincipal
-                    ? `<img class="img-fluid"
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;"
-                            src="data:image/jpeg;base64,${item.imagenPrincipal}" />`
-                    : `<div class="d-flex justify-content-center align-items-center h-100 text-muted">
-                            <i class="bi bi-image fs-1"></i>
-                            <span class="small ms-2">Sin imagen</span>
-                       </div>`;
-
-                const puedeEditar = item.cantidadPujas == 0 &&
-                                    new Date(item.fechaHoraInicio) > new Date();
-
-                const puedeSwitch = new Date(item.fechaHoraInicio) > new Date();
-
-                // botones dinámicos
-                let botones = `
-                    <a href="/Subastaa/Details/${item.idSubasta}"
-                       class="btn btn-primary w-100">
-                       Ver Detalles
-                    </a>
-                `;
-
-                if (puedeEditar) {
-                    botones += `
-                        <a href="/Subastaa/Edit/${item.idSubasta}"
-                           class="btn btn-warning d-flex align-items-center justify-content-center">
-                           <i class="bi bi-pencil-square"></i>
-                        </a>
-                    `;
-                }
-
-                if (puedeSwitch) {
-                    const checked = item.estadoSubasta === "Activa" ? "checked" : "";
-
-                    botones += `
-                        <form action="/Subastaa/ToggleEstado" method="post"
-                              class="d-flex justify-content-center align-items-center m-0">
-
-                            <input type="hidden" name="id" value="${item.idSubasta}" />
-
-                            <label class="switch m-0">
-                                <input type="checkbox" ${checked}
-                                       onchange="confirmarCambio(this)">
-                                <span class="slider"></span>
-                            </label>
-                        </form>
-                    `;
-                }
-
-                const card = `
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-
-                            <div class="bg-light rounded-top d-flex justify-content-center align-items-center"
-                                 style="height: 220px; overflow: hidden;">
-                                ${imagen}
-                            </div>
-
-                            <div class="card-body d-flex flex-column">
-
-                                <h5>${item.objeto}</h5>
-
-                                <p><strong>Precio Base:</strong> ₡${item.precioBase}</p>
-                                <p><strong>Pujas:</strong> ${item.cantidadPujas}</p>
-
-                                <p class="text-danger">
-                                    <strong>Cierra:</strong> ${new Date(item.fechaHoraCierre).toLocaleString()}
-                                </p>
-
-                                <div class="mt-auto d-flex gap-2">
-                                    ${botones}
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                contenedor.innerHTML += card;
-            });
-        }
-
-        // Inicial
-        renderSubastas(subastas);
-
-        // Eventos
-        document.getElementById("btnTodas").addEventListener("click", () => {
-            renderSubastas(subastas);
-        });
-
-        document.getElementById("btnActivas").addEventListener("click", () => {
-            const activas = subastas.filter(s => s.estadoSubasta === "Activa");
-            renderSubastas(activas);
-        });
-
-        document.getElementById("btnFinalizadas").addEventListener("click", () => {
-            const finalizadas = subastas.filter(s => s.estadoSubasta === "Finalizada");
-            renderSubastas(finalizadas);
-        });
-    </script>
+   
 }

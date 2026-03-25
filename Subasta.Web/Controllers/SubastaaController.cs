@@ -14,7 +14,7 @@ namespace Subasta.Web.Controllers
         private readonly IServiceObjeto _serviceObjeto;
         private readonly IServiceUsuario _serviceUsuario;
 
-        private readonly int idUsuario = 2;
+        private readonly int idUsuario = 3;
 
         public SubastaaController(IServiceSubasta serviceSubasta, IServiceObjeto serviceObjeto, IServiceUsuario serviceUsuario)
         {
@@ -46,6 +46,11 @@ namespace Subasta.Web.Controllers
         {
             var finalizadas = await _serviceSubasta.ListFinalizadas();
             return View(finalizadas); 
+        }
+        public async Task<IActionResult> Borradores()
+        {
+            var borradores = await _serviceSubasta.ListBorradores();
+            return View(borradores);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -84,16 +89,18 @@ namespace Subasta.Web.Controllers
         // -------------------------
         // Helpers para combos
         // -------------------------
-        private async Task LoadCombosAsync(IEnumerable<string>? selectedCategoriaIds = null)
+        private async Task LoadCombosAsync()
         {
             // Objetos
             var activas = await _serviceObjeto.ListActivas();
             var subastasA = await _serviceSubasta.ListActivas();
             var subastasF = await _serviceSubasta.ListFinalizadas();
+            var subastasC = await _serviceSubasta.ListBorradores();
 
             var objetosEnSubasta = subastasA
             .Select(s => s.IdObjeto)
             .Concat(subastasF.Select(s => s.IdObjeto))
+            .Concat(subastasC.Select(s => s.IdObjeto))
             .ToHashSet();
 
             // Filtrar objetos que NO estén en subastas
@@ -101,16 +108,15 @@ namespace Subasta.Web.Controllers
                 .Where(o => !objetosEnSubasta.Contains(o.IdObjeto))
                 .ToList();
 
-            ViewBag.ListObjetos = objetosDisponibles;
+            ViewBag.ListObjetos = objetosDisponibles
+    .Select(o => new {
+        o.IdObjeto,
+        Nombre = o.Nombre + " - " + o.Descripcion
+    }).ToList();
         }
 
         public async Task<IActionResult> Create()
         {
-            //var usuario = await _serviceSubasta.AddAsync(dto);
-
-            //ViewBag.UsuarioActual = usuario?.NombreCompleto;
-            //ViewBag.Estado = "Activo";
-
             await LoadCombosAsync();
 
             var usuario = await _serviceUsuario.FindByIdAsync(idUsuario);
@@ -135,13 +141,17 @@ namespace Subasta.Web.Controllers
                     ModelState.AddModelError("FechaHoraCierre", "La fecha de cierre debe ser mayor que la fecha de inicio");
                 }
 
-                dto.EstadoSubasta = "Activa"; 
+                if (!ModelState.IsValid)
+                {
+                    await LoadCombosAsync();
+                    return View(dto);
+                }
 
                 await _serviceSubasta.AddAsync(dto, idUsuario, estado);
 
-                TempData["Mensaje"] = $"La subasta del objeto{dto.Objeto} fue creada correctamente.";
+                TempData["Mensaje"] = $"La subasta del objeto fue creada correctamente.";
 
-                return RedirectToAction(nameof(Activas));
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
@@ -153,9 +163,8 @@ namespace Subasta.Web.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var dto = await _serviceSubasta.FindByIdAsync(id);
-
+            await LoadCombosAsync();
             return View(dto);
-
 
         }
         [HttpPost]
@@ -168,7 +177,7 @@ namespace Subasta.Web.Controllers
 
                 var subastaActual = await _serviceSubasta.FindByIdAsync(id);
 
-                if (subastaActual == null)
+                    if (subastaActual == null)
                 {
                     return Content("Error: Subasta no encontrada (ID: " + id + ")");
                 }
@@ -177,11 +186,16 @@ namespace Subasta.Web.Controllers
                 {
                     ModelState.AddModelError("FechaHoraCierre", "La fecha de cierre debe ser mayor que la fecha de inicio");
                 }
-                //if (!ModelState.IsValid)
-                //{
-                //    await LoadCombosAsync();
-                //    return View(dto);
-                //}
+                if (!ModelState.IsValid)
+                {
+                    await LoadCombosAsync();
+                    dto.Objeto = subastaActual.Objeto;
+                    dto.Imagenes = subastaActual.Imagenes;
+                    dto.Categorias = subastaActual.Categorias;
+                    dto.Condicion = subastaActual.Condicion;
+
+                    return View(dto);
+                }
                 await _serviceSubasta.UpdateAsync(id, dto);
 
                 TempData["Mensaje"] = $"La subasta{dto.IdSubasta} fue actualizada correctamente.";

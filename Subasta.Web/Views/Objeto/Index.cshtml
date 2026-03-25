@@ -88,7 +88,7 @@ else
                                 <i class="bi bi-eye"></i>
                             </a>
 
-                            @if (item.Estado == "Activo" &&(item.HistorialSubastas == null ||!item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa")))
+                            @if (item.Estado == "Activo" && (item.HistorialSubastas == null || !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa") && !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Borrador")))
                             {
                                 <!-- Editar -->
                                 <a asp-controller="Objeto"
@@ -101,7 +101,7 @@ else
 
                             <!-- Switch -->
                             @if (item.HistorialSubastas == null ||
-                           !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa") && !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Finalizada"))
+                                                !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Activa") && !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Finalizada") && !item.HistorialSubastas.Any(s => s.EstadoSubasta == "Borrador"))
                             {
                                 <form asp-controller="Objeto" asp-action="ToggleEstado" method="post" class="flex-fill d-flex justify-content-center align-items-center m-0">
                                     <input type="hidden" name="id" value="@item.IdObjeto" />

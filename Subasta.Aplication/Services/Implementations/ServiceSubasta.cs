@@ -42,7 +42,9 @@ namespace Subasta.Aplication.Services.Implementations
         {
             var all = await _repository.ListAsync();
 
-            return _mapper.Map<ICollection<SubastaDTO>>(all);
+            var allSinBorradores = all.Where(s => s.IdEstadoSubasta != 4);
+
+            return _mapper.Map<ICollection<SubastaDTO>>(allSinBorradores);
         }
 
         public async Task<ICollection<SubastaDTO>> ListActivas()
@@ -61,13 +63,26 @@ namespace Subasta.Aplication.Services.Implementations
         {
             var all = await _repository.ListAsync();
 
-            var activas = all
+            var finalizadas = all
                 .Where(s => s.IdEstadoSubastaNavigation != null &&
                             s.IdEstadoSubastaNavigation.Descripcion == "Finalizada")
                 .ToList();
 
 
-            return _mapper.Map<ICollection<SubastaDTO>>(activas);
+            return _mapper.Map<ICollection<SubastaDTO>>(finalizadas);
+        }
+
+        public async Task<ICollection<SubastaDTO>> ListBorradores()
+        {
+            var all = await _repository.ListAsync();
+
+            var borradores = all
+                .Where(s => s.IdEstadoSubastaNavigation != null &&
+                            s.IdEstadoSubastaNavigation.Descripcion == "Borrador")
+                .ToList();
+
+
+            return _mapper.Map<ICollection<SubastaDTO>>(borradores);
         }
 
         public async Task<int> AddAsync(SubastaDTO dto, int idUsuario, int idEstado)
