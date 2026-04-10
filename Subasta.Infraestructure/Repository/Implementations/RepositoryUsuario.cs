@@ -10,13 +10,19 @@ using Subasta.Infraestructure.Repository.Interfaces;
 
 namespace Subasta.Infraestructure.Repository.Implementations
 {
-    public class RepositoryUsuario: IRepositoryUsuario
+    public class RepositoryUsuario : IRepositoryUsuario
     {
         private readonly SubastaContext _context;
 
         public RepositoryUsuario(SubastaContext context)
         {
             _context = context;
+        }
+        public async Task<string> AddAsync(Usuario entity)
+        {
+            await _context.Set<Usuario>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity.CorreoElectronico;
         }
         public async Task<Usuario?> FindByIdAsync(int id)
         {
@@ -37,6 +43,14 @@ namespace Subasta.Infraestructure.Repository.Implementations
                 .Include(u => u.IdEstadoNavigation)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+        public async Task<Usuario> LoginAsync(string correo, string password)
+        {
+            var @object = await _context.Set<Usuario>()
+                                        .Include(b => b.IdRolNavigation)
+                                        .Where(p => p.CorreoElectronico == correo && p.Contrasenna == password)
+                                        .FirstOrDefaultAsync();
+            return @object!;
         }
 
         public async Task UpdateAsync(Usuario entity)

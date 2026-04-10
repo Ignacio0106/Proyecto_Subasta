@@ -11,6 +11,8 @@ namespace Subasta.Aplication.Services.Interfaces
     {
         Task<ICollection<UsuarioDTO>> ListAsync();
         Task<UsuarioDTO?> FindByIdAsync(int id);
+        Task<UsuarioDTO> LoginAsync(string correo, string password);
+        Task<string> AddAsync(UsuarioDTO dto);
 
         Task UpdateAsync(int id, UsuarioDTO dto);
         Task ToggleEstadoAsync(int id);

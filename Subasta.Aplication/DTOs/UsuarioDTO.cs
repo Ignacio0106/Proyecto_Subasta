@@ -28,7 +28,8 @@ namespace Subasta.Aplication.DTOs
         [DisplayName("Cantidad de Subastas")]
         public int? CantidadSubastas { get; set; }
         [DisplayName("Cantidad de Pujas")]
-        public int? CantidadPujas { get; set; } 
+        public int? CantidadPujas { get; set; }
+        public RolDTO IdRolNavigation { get; set; } = new();
 
     }
 }

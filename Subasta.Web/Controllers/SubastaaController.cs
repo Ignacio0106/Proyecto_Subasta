@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Subasta.Aplication.DTOs;
 using Subasta.Aplication.Services.Implementations;
 using Subasta.Aplication.Services.Interfaces;
 using Subasta.Infraestructure.Models;
 using Subasta.Web.Helpers;
+using Subasta.Web.Hubs;
+using System.Security.Claims;
 
 namespace Subasta.Web.Controllers
 {
@@ -13,14 +16,16 @@ namespace Subasta.Web.Controllers
         private readonly IServiceSubasta _serviceSubasta;
         private readonly IServiceObjeto _serviceObjeto;
         private readonly IServiceUsuario _serviceUsuario;
+        private readonly IHubContext<SubastaHub> _hubContext;
 
         private readonly int idUsuario = 3;
 
-        public SubastaaController(IServiceSubasta serviceSubasta, IServiceObjeto serviceObjeto, IServiceUsuario serviceUsuario)
+        public SubastaaController(IServiceSubasta serviceSubasta, IServiceObjeto serviceObjeto, IServiceUsuario serviceUsuario, IHubContext<SubastaHub> hubContext)
         {
             _serviceSubasta = serviceSubasta;
             _serviceObjeto = serviceObjeto;
             _serviceUsuario = serviceUsuario;
+            _hubContext = hubContext;
         }
         [HttpGet]
         public async Task<IActionResult> Index(string filtro)
@@ -201,7 +206,7 @@ namespace Subasta.Web.Controllers
                 TempData["Mensaje"] = $"La subasta{dto.IdSubasta} fue actualizada correctamente.";
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 return Content(ex.InnerException?.Message ?? ex.Message);
             }
@@ -215,6 +220,64 @@ namespace Subasta.Web.Controllers
             TempData["Mensaje"] = "Estado actualizado correctamente";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Pujar(int id)
+        {
+            var dto = await _serviceSubasta.FindByIdAsync(id);
+
+            if (dto == null)
+            {
+                // Esto evita que la vista reciba un modelo nulo
+                return NotFound();
+            }
+
+            return View(dto);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Pujar(int idSubasta, decimal monto)
+        {
+            try
+            {
+                var subasta = await _serviceSubasta.FindByIdAsync(idSubasta);
+
+                if (subasta == null)
+                    return BadRequest("Subasta no existe");
+
+                // 🔥 VALIDACIÓN CLAVE
+                if (monto <= subasta.Pujas[0].MontoOfertado)
+                {
+                    TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
+                        "Puja inválida",
+                        "El monto debe ser mayor a la puja actual",
+                        SweetAlertMessageType.warning
+                    );
+
+                    return RedirectToAction("Details", new { id = idSubasta });
+                }
+                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                int idUsuario = int.Parse(userIdString);
+
+                // 🔥 CREAR PUJA (aquí deberías tener un servicio real)
+                await _serviceSubasta.RegistrarPuja(idSubasta, idUsuario, monto);
+
+                // 🔥 SIGNALR (AQUÍ ESTÁ LA MAGIA)
+                await _hubContext.Clients.Group($"Subasta-{idSubasta}")
+                    .SendAsync("NuevaPuja", new
+                    {
+                        usuario = "Usuario " + idUsuario, // luego lo mejoras
+                        monto = monto,
+                        fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                    });
+
+                return Ok(); // ⚠️ IMPORTANTE para AJAX
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

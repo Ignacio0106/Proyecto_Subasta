@@ -1,15 +1,19 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Serilog.Events;
 using Serilog;
+using Serilog.Events;
 using Subasta.Aplication.Profiles;
 using Subasta.Aplication.Services.Implementations;
 using Subasta.Aplication.Services.Interfaces;
+using Subasta.Application.Config;
 using Subasta.Infraestructure.Data;
+using Subasta.Infraestructure.Repository.Implementations;
 using Subasta.Infraestructure.Repository.Interfaces;
-using System.Text;
+using Subasta.Web.Hubs;
 using Subasta.Web.Middleware;
 using System.Runtime.Intrinsics.X86;
-using Subasta.Infraestructure.Repository.Implementations;
+using System.Text;
 
 //LOGGER CON SERILOG
 // ======================= 
@@ -71,6 +75,9 @@ LogEventLevel.Information)
 Log.Logger = logger;
 
 var builder = WebApplication.CreateBuilder(args);
+// Mapeo de la clase AppConfig para leer appsettings.json
+builder.Services.Configure<AppConfig>(builder.Configuration);
+
 
 
 // Integrar Serilog al host 
@@ -78,6 +85,21 @@ builder.Host.UseSerilog(Log.Logger);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Cache en memoria (requerido por Session)
+builder.Services.AddDistributedMemoryCache();
+
+//Registrar Session con opciones
+builder.Services.AddSession(options =>
+{
+    // Tiempo máximo sin actividad antes de expirar la sesión
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+
+    // Opciones de la cookie de sesión
+    options.Cookie.HttpOnly = true;          // No accesible desde JS
+    options.Cookie.IsEssential = true;       // Necesaria aunque haya consentimiento de cookies
+    options.Cookie.Name = ".Libreria.Session";
+});
 
 //*********** 
 // ======================= 
@@ -119,6 +141,21 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<CondicionProfile>();
 });
 
+//Seguridad
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => {
+        options.LoginPath = "/Login/Index";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.AccessDeniedPath = "/Login/Forbidden";
+    });
+builder.Services.AddControllersWithViews(options => {
+    options.Filters.Add(
+        new ResponseCacheAttribute
+        {
+            NoStore = true,
+            Location = ResponseCacheLocation.None,
+        });
+});
 // ======================= 
 // Configurar SQL Server DbContext 
 // ======================= 
@@ -142,6 +179,9 @@ builder.Services.AddDbContext<SubastaContext>(options =>
 });
 
 //*********** 
+
+// Registrar SignalR
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -171,5 +211,8 @@ app.UseAntiforgery();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Mapear el Hub
+app.MapHub<SubastaHub>("/subastaHub");
 
 app.Run();

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Subasta.Aplication.DTOs;
+using Subasta.Aplication.Services.Implementations;
 using Subasta.Aplication.Services.Interfaces;
+using Subasta.Infraestructure.Models;
 using Subasta.Web.Helpers;
 
 namespace Subasta.Web.Controllers
@@ -20,7 +23,5 @@ namespace Subasta.Web.Controllers
             return View(pujas);
         }
 
-        
-           
     }
 }

@@ -9,6 +9,9 @@ namespace Subasta.Aplication.Profiles
         public SubastaProfile()
         {
             // ENTIDAD → DTO (para mostrar)
+            CreateMap<Objeto, ObjetoDTO>();
+            CreateMap<Usuario, UsuarioDTO>();
+
             CreateMap<Subastaa, SubastaDTO>()
     .ForMember(dest => dest.UsuarioCreador,
         opt => opt.MapFrom(src => src.IdUsuarioCreadorNavigation.NombreCompleto))
@@ -28,7 +31,7 @@ namespace Subasta.Aplication.Profiles
             .OrderBy(i => i.IdImagen)
             .Select(i => i.Imagen)
             .ToList()))
-    .ForMember(dest => dest.Condicion,
+    .ForMember(d => d.Condicion,
         opt => opt.MapFrom(src => src.IdObjetoNavigation.IdCondicionNavigation.Descripcion));
 
             // DTO → ENTIDAD (crear / editar)
@@ -36,6 +39,7 @@ namespace Subasta.Aplication.Profiles
                 .ForMember(d => d.IdEstadoSubastaNavigation, o => o.Ignore())
                 .ForMember(d => d.IdUsuarioCreadorNavigation, o => o.Ignore())
                 .ForMember(d => d.IdObjetoNavigation, o => o.Ignore())
+                .ForMember(d => d.IdUsuarioCreadorNavigation, o => o.Ignore())
                 .ForMember(d => d.Pago, o => o.Ignore())
                 .ForMember(d => d.Puja, o => o.Ignore())
                 .ForMember(d => d.ResultadoSubasta, o => o.Ignore());

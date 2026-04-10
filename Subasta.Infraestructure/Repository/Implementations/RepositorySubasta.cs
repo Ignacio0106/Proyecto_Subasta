@@ -82,5 +82,12 @@ namespace Subasta.Infraestructure.Repository.Implementations
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<int> RegistrarPujaAsync(Puja entity)
+        {
+            await _context.Set<Puja>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity.IdPuja;
+        }
     }
 }

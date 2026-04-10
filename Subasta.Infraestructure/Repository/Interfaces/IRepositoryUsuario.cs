@@ -13,6 +13,9 @@ namespace Subasta.Infraestructure.Repository.Interfaces
         Task<ICollection<Usuario>> ListAsync();
         Task<Usuario?> FindByIdAsync(int id);
 
+        Task<Usuario> LoginAsync(string correo, string password);
+        Task<string> AddAsync(Usuario entity);
+
         Task UpdateAsync(Usuario entity);
         Task UpdateEstadoAsync(Usuario entity);
     }

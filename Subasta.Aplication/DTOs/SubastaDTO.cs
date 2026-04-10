@@ -45,5 +45,12 @@ namespace Subasta.Aplication.DTOs
 
         public string Condicion { get; set; } = "Sin definir";
         public List<string> Categorias { get; set; } = new List<string>();
+
+        public ObjetoDTO IdObjetoNavigation { get; set; } = new();
+        public UsuarioDTO IdUsuarioCreadorNavigation { get; set; } = new();
+
+        public List<PujaDTO> Pujas { get; set; } = new List<PujaDTO>();
+
+        //public PujaDTO? PujaActual { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Subasta.Aplication.Services.Implementations
 {
-    public class ServiceSubasta: IServiceSubasta
+    public class ServiceSubasta : IServiceSubasta
     {
         private readonly IRepositorySubasta _repository;
         private readonly IMapper _mapper;
@@ -103,32 +103,32 @@ namespace Subasta.Aplication.Services.Implementations
 
         public async Task UpdateAsync(int id, SubastaDTO dto)
         {
-                var entity = await _repository.FindByIdAsync(id);
+            var entity = await _repository.FindByIdAsync(id);
 
-                if (entity == null)
-                    throw new Exception("Objeto no encontrado");
+            if (entity == null)
+                throw new Exception("Objeto no encontrado");
 
-                var idUsuario = entity.IdUsuarioCreador;
-                var idEstado = entity.IdEstadoSubasta;
-                var idObjeto = entity.IdObjeto;
-
-
-                entity.IdUsuarioCreadorNavigation = null;
-                entity.IdObjetoNavigation = null;
-                entity.IdEstadoSubastaNavigation = null;
+            var idUsuario = entity.IdUsuarioCreador;
+            var idEstado = entity.IdEstadoSubasta;
+            var idObjeto = entity.IdObjeto;
 
 
-                _mapper.Map(dto, entity);
+            entity.IdUsuarioCreadorNavigation = null;
+            entity.IdObjetoNavigation = null;
+            entity.IdEstadoSubastaNavigation = null;
 
 
-                entity.IdUsuarioCreador= idUsuario;
-                entity.IdEstadoSubasta = idEstado;
-                entity.IdObjeto= idObjeto;
-
-      
+            _mapper.Map(dto, entity);
 
 
-                await _repository.UpdateAsync(entity);
+            entity.IdUsuarioCreador = idUsuario;
+            entity.IdEstadoSubasta = idEstado;
+            entity.IdObjeto = idObjeto;
+
+
+
+
+            await _repository.UpdateAsync(entity);
         }
 
         public async Task ToggleEstadoAsync(int id)
@@ -142,6 +142,21 @@ namespace Subasta.Aplication.Services.Implementations
             subasta.IdEstadoSubasta = subasta.IdEstadoSubasta == 1 ? 3 : 1;
 
             await _repository.UpdateEstadoAsync(subasta);
+        }
+
+        public async Task RegistrarPuja(int idSubasta, int idUsuario, decimal monto)
+        {
+            var subasta = await _repository.FindByIdAsync(idSubasta);
+            if (subasta == null)
+                throw new Exception("Subasta no existe");
+            var puja = new Puja
+            {
+                IdSubasta = idSubasta,
+                IdUsuario = idUsuario,
+                MontoOfertado = monto,
+                FechaHora = DateTime.Now
+            };
+            await _repository.RegistrarPujaAsync(puja);
         }
     }
 }

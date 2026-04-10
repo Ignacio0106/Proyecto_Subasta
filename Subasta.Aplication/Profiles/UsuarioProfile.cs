@@ -8,13 +8,15 @@ namespace Subasta.Aplication.Profiles
     {
         public UsuarioProfile()
         {
+            CreateMap<Rol, RolDTO>();
+
             // ENTIDAD → DTO (mostrar)
             CreateMap<Usuario, UsuarioDTO>()
     .ForMember(d => d.Rol,
         o => o.MapFrom(s => s.IdRolNavigation.NombreRol))
     .ForMember(d => d.Estado,
         o => o.MapFrom(s => s.IdEstadoNavigation.Descripcion));
-
+ 
 
 
             // DTO → ENTIDAD (crear / editar)

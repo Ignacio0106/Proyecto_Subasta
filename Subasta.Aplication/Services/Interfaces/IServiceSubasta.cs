@@ -20,5 +20,7 @@ namespace Subasta.Aplication.Services.Interfaces
         Task UpdateAsync(int id, SubastaDTO dto);
 
         Task ToggleEstadoAsync(int id);
+
+        Task RegistrarPuja(int idSubasta, int idUsuario, decimal monto);
     }
 }
