@@ -1,0 +1,90 @@
+﻿@model Subasta.Aplication.DTOs.SubastaDTO
+
+@{
+    ViewData["Title"] = "GetHistorial";
+}
+
+<h1>GetHistorial</h1>
+
+<div>
+    <h4>SubastaDTO</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdSubasta)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdSubasta)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaHoraInicio)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaHoraInicio)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaHoraCierre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaHoraCierre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PrecioBase)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PrecioBase)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IncrementoMinimo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IncrementoMinimo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EstadoSubasta)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EstadoSubasta)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UsuarioCreador)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UsuarioCreador)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdObjeto)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdObjeto)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Objeto)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Objeto)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CantidadPujas)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CantidadPujas)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ImagenPrincipal)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ImagenPrincipal)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Condicion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Condicion)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

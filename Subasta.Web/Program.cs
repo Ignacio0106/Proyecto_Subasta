@@ -10,6 +10,7 @@ using Subasta.Application.Config;
 using Subasta.Infraestructure.Data;
 using Subasta.Infraestructure.Repository.Implementations;
 using Subasta.Infraestructure.Repository.Interfaces;
+using Subasta.Web;
 using Subasta.Web.Hubs;
 using Subasta.Web.Middleware;
 using System.Runtime.Intrinsics.X86;
@@ -126,6 +127,14 @@ builder.Services.AddScoped<IRepositoryCategoria, RepositoryCategoria>();
 
 builder.Services.AddTransient<IServiceCondicion, ServiceCondicion>();
 builder.Services.AddScoped<IRepositoryCondicion, RepositoryCondicion>();
+
+builder.Services.AddScoped<IRepositoryResultadoSubasta, RepositoryResultadoSubasta>();
+builder.Services.AddScoped<IRepositoryPago, RepositoryPago>();
+
+builder.Services.AddTransient<IServiceResultadoSubasta, ServiceResultadoSubasta>();
+builder.Services.AddTransient<IServicePago, ServicePago>();
+
+builder.Services.AddHostedService<SubastaCierreService>();
 
 // ======================= 
 // Configurar AutoMapper 

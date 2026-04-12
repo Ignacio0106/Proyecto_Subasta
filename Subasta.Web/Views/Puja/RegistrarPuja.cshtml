@@ -1,0 +1,53 @@
+﻿@model Subasta.Aplication.DTOs.PujaDTO
+
+@{
+    ViewData["Title"] = "RegistrarPuja";
+}
+
+<h1>RegistrarPuja</h1>
+
+<h4>PujaDTO</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="RegistrarPuja">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdPuja" class="control-label"></label>
+                <input asp-for="IdPuja" class="form-control" />
+                <span asp-validation-for="IdPuja" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MontoOfertado" class="control-label"></label>
+                <input asp-for="MontoOfertado" class="form-control" />
+                <span asp-validation-for="MontoOfertado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaHora" class="control-label"></label>
+                <input asp-for="FechaHora" class="form-control" />
+                <span asp-validation-for="FechaHora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NombreUsuario" class="control-label"></label>
+                <input asp-for="NombreUsuario" class="form-control" />
+                <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdSubasta" class="control-label"></label>
+                <input asp-for="IdSubasta" class="form-control" />
+                <span asp-validation-for="IdSubasta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

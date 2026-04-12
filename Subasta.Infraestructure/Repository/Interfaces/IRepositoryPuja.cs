@@ -12,5 +12,7 @@ namespace Subasta.Infraestructure.Repository.Interfaces
     {
         Task<ICollection<Puja>> ListBySubastaAsync(int id);
         Task<Puja> FindByIdAsync(int id);
+        Task<int> AddAsync(Puja puja);
+        Task<Puja?> GetPujaMaximaEntidadAsync(int idSubasta);
     }
 }

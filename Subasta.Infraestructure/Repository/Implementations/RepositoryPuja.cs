@@ -10,7 +10,7 @@ using Subasta.Infraestructure.Repository.Interfaces;
 
 namespace Subasta.Infraestructure.Repository.Implementations
 {
-    public class RepositoryPuja: IRepositoryPuja
+    public class RepositoryPuja : IRepositoryPuja
     {
         private readonly SubastaContext _context;
 
@@ -34,5 +34,25 @@ namespace Subasta.Infraestructure.Repository.Implementations
                 .ToListAsync();
         }
 
+        
+
+        public async Task<int> AddAsync(Puja puja)
+        {
+            _context.Puja.Add(puja);
+
+            var result = await _context.SaveChangesAsync();
+
+            Console.WriteLine("Filas afectadas: " + result);
+
+            return result;
+        }    
+
+    public async Task<Puja?> GetPujaMaximaEntidadAsync(int idSubasta)
+        {
+            return await _context.Puja
+                .Where(p => p.IdSubasta == idSubasta)
+                .OrderByDescending(p => p.MontoOfertado)
+                .FirstOrDefaultAsync();
+        }
     }
-}
+    }

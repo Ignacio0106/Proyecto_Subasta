@@ -11,5 +11,7 @@ namespace Subasta.Aplication.Services.Interfaces
     {
         Task<ICollection<PujaDTO>> ListBySubastaAsync(int idSubasta);
         Task<PujaDTO?> FindByIdAsync(int id);
+        Task<(bool exito, string mensaje)> RegistrarPujaAsync(int idSubasta, decimal monto, int idUsuarioActual);
+
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Subasta.Aplication.DTOs;
 using Subasta.Aplication.Services.Interfaces;
+using Subasta.Infraestructure.Repository.Implementations;
 using Subasta.Infraestructure.Repository.Interfaces;
 
 namespace Subasta.Aplication.Services.Implementations
@@ -31,5 +32,7 @@ namespace Subasta.Aplication.Services.Implementations
             var list = await _repository.ListAsync();
             return _mapper.Map<ICollection<PagoDTO>>(list);
         }
+
+       
     }
 }

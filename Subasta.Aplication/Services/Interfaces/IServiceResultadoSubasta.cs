@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Subasta.Aplication.DTOs;
+using Subasta.Infraestructure.Models;
 
 namespace Subasta.Aplication.Services.Interfaces
 {
@@ -11,5 +12,6 @@ namespace Subasta.Aplication.Services.Interfaces
     {
         Task<ICollection<ResultadoSubastaDTO>> ListAsync();
         Task<ResultadoSubastaDTO?> FindByIdAsync(int id);
+        Task<ResultadoSubastaDTO?> ObtenerResultadoAsync(int idSubasta);
     }
 }

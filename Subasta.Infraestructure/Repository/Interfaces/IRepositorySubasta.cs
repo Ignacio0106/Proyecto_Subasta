@@ -17,7 +17,5 @@ namespace Subasta.Infraestructure.Repository.Interfaces
         Task UpdateAsync(Subastaa entity);
 
         Task UpdateEstadoAsync(Subastaa entity);
-
-        Task<int> RegistrarPujaAsync(Puja entity);
     }
 }

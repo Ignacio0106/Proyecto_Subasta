@@ -12,7 +12,7 @@ namespace Subasta.Aplication.Profiles
             CreateMap<ResultadoSubasta, ResultadoSubastaDTO>()
                 .ForMember(d => d.Subasta,
                     o => o.MapFrom(s => s.IdSubastaNavigation.IdSubasta))
-                .ForMember(d => d.UsuarioGanador,
+                .ForMember(d => d.IdUsuarioGanador,
                     o => o.MapFrom(s => s.IdUsuarioGanadorNavigation.NombreCompleto));
 
             // DTO → ENTIDAD

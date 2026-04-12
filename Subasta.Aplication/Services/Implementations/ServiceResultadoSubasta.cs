@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Subasta.Aplication.DTOs;
 using Subasta.Aplication.Services.Interfaces;
+using Subasta.Infraestructure.Models;
 using Subasta.Infraestructure.Repository.Interfaces;
 
 namespace Subasta.Aplication.Services.Implementations
@@ -31,5 +32,25 @@ namespace Subasta.Aplication.Services.Implementations
             var list = await _repository.ListAsync();
             return _mapper.Map<ICollection<ResultadoSubastaDTO>>(list);
         }
+        
+
+        public async Task<ResultadoSubastaDTO?> ObtenerResultadoAsync(int idSubasta)
+        {
+            var entity = await _repository.FindBySubastaIdAsync(idSubasta);
+
+            if (entity == null)
+                return null;
+
+            return new ResultadoSubastaDTO
+            {
+                IdResultado = entity.IdResultado,
+                MontoFinal = entity.MontoFinal,
+                FechaCierre = entity.FechaCierre,
+                IdUsuarioGanador = entity.IdUsuarioGanador,
+                NombreUsuario = entity.IdUsuarioGanadorNavigation?.NombreCompleto ?? ""
+            };
+        }
+
+        
     }
 }

@@ -14,18 +14,22 @@ namespace Subasta.Web.Controllers
     public class SubastaaController : Controller
     {
         private readonly IServiceSubasta _serviceSubasta;
+        private readonly IServiceResultadoSubasta _serviceResultado;
+        private readonly IServicePuja _servicePuja;
         private readonly IServiceObjeto _serviceObjeto;
         private readonly IServiceUsuario _serviceUsuario;
         private readonly IHubContext<SubastaHub> _hubContext;
 
         private readonly int idUsuario = 3;
 
-        public SubastaaController(IServiceSubasta serviceSubasta, IServiceObjeto serviceObjeto, IServiceUsuario serviceUsuario, IHubContext<SubastaHub> hubContext)
+        public SubastaaController(IServiceSubasta serviceSubasta, IServiceObjeto serviceObjeto, IServiceUsuario serviceUsuario, IHubContext<SubastaHub> hubContext, IServicePuja servicePuja, IServiceResultadoSubasta serviceResultado)
         {
             _serviceSubasta = serviceSubasta;
             _serviceObjeto = serviceObjeto;
             _serviceUsuario = serviceUsuario;
             _hubContext = hubContext;
+            _servicePuja = servicePuja;
+            _serviceResultado = serviceResultado;
         }
         [HttpGet]
         public async Task<IActionResult> Index(string filtro)
@@ -43,8 +47,16 @@ namespace Subasta.Web.Controllers
         public async Task<IActionResult> Activas()
         {
             var activas = await _serviceSubasta.ListActivas();
-            return View(activas); 
+            return View(activas);
         }
+
+        //public async Task<IActionResult> Activas()
+        //{
+            
+            
+        //    var activas = await _serviceSubasta.ListActivas();
+        //    return View(activas); 
+        //}
 
         // Vista de subastas finalizadas
         public async Task<IActionResult> Finalizadas()
@@ -87,6 +99,9 @@ namespace Subasta.Web.Controllers
                 $"Mostrando información de: {Subasta.Objeto}",
                 SweetAlertMessageType.info
             );
+
+            var resultado = await _serviceSubasta.ObtenerResultadoAsync(id.Value);
+            ViewBag.Resultado = resultado;
 
             return View(Subasta);
         }
@@ -228,9 +243,10 @@ namespace Subasta.Web.Controllers
 
             if (dto == null)
             {
-                // Esto evita que la vista reciba un modelo nulo
                 return NotFound();
             }
+            var resultado = await _serviceResultado.ObtenerResultadoAsync(id);
+            ViewBag.Resultado = resultado;
 
             return View(dto);
         }
@@ -245,8 +261,37 @@ namespace Subasta.Web.Controllers
                 if (subasta == null)
                     return BadRequest("Subasta no existe");
 
-                // 🔥 VALIDACIÓN CLAVE
-                if (monto <= subasta.Pujas[0].MontoOfertado)
+                var ahora = DateTime.Now;
+
+
+                
+
+                if (subasta.FechaHoraCierre <= ahora)
+                {
+                    await _serviceSubasta.CerrarSubastaAsync(idSubasta);
+
+                    // 🔥 OBTENER GANADOR
+                    var resultado = await _serviceResultado.ObtenerResultadoAsync(idSubasta);
+
+                    // 🔥 ENVIAR GANADOR
+                    await _hubContext.Clients.Group($"Subasta-{idSubasta}")
+                        .SendAsync("SubastaCerrada", new
+                        {
+                            hayGanador = resultado != null && resultado.IdUsuarioGanador != 0,
+                            ganador = resultado?.NombreUsuario ?? "",
+                            montoFinal = resultado?.MontoFinal ?? 0
+                        });
+
+                    return BadRequest("La subasta ya finalizó");
+                }
+
+
+                var pujaAnterior = subasta.Pujas
+                    .OrderByDescending(p => p.MontoOfertado)
+                    .FirstOrDefault();
+
+
+                if (pujaAnterior != null && monto <= pujaAnterior.MontoOfertado)
                 {
                     TempData["Notificacion"] = SweetAlertHelper.CrearNotificacion(
                         "Puja inválida",
@@ -256,28 +301,58 @@ namespace Subasta.Web.Controllers
 
                     return RedirectToAction("Details", new { id = idSubasta });
                 }
-                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 int idUsuario = int.Parse(userIdString);
 
-                // 🔥 CREAR PUJA (aquí deberías tener un servicio real)
-                await _serviceSubasta.RegistrarPuja(idSubasta, idUsuario, monto);
+      
+                await _servicePuja.RegistrarPujaAsync(idSubasta, monto, idUsuario);
 
-                // 🔥 SIGNALR (AQUÍ ESTÁ LA MAGIA)
+              
+                if (pujaAnterior != null && pujaAnterior.NombreUsuario != ("Usuario " + idUsuario))
+                {
+                    await _hubContext.Clients.Group($"Subasta-{idSubasta}")
+                        .SendAsync("PujaSuperada", "Tu puja ha sido superada");
+                }
+
+              
                 await _hubContext.Clients.Group($"Subasta-{idSubasta}")
                     .SendAsync("NuevaPuja", new
                     {
-                        usuario = "Usuario " + idUsuario, // luego lo mejoras
+                        usuario = "Usuario " + idUsuario,
                         monto = monto,
                         fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
                     });
 
-                return Ok(); // ⚠️ IMPORTANTE para AJAX
+
+
+                return Ok();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetHistorial(int id)
+        {
+            var subasta = await _serviceSubasta.FindByIdAsync(id);
+
+            if (subasta == null)
+                return NotFound();
+
+            var historial = subasta.Pujas
+                .OrderByDescending(p => p.FechaHora)
+                .Take(10)
+                .Select(p => new
+                {
+                    nombreUsuario = p.NombreUsuario,
+                    montoOfertado = p.MontoOfertado,
+                    fechaHora = p.FechaHora
+                });
+
+            return Json(historial);
         }
     }
 }

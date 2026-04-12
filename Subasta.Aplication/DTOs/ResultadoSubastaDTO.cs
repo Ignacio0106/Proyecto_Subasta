@@ -16,6 +16,8 @@ namespace Subasta.Aplication.DTOs
 
         public string Subasta { get; set; } = string.Empty;
 
-        public string UsuarioGanador { get; set; } = string.Empty;
+        public int IdUsuarioGanador { get; set; }
+        public string NombreUsuario { get; set; } = string.Empty;
+
     }
 }

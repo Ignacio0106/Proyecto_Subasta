@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Subasta.Aplication.DTOs;
+using Subasta.Infraestructure.Models;
 
 namespace Subasta.Aplication.Services.Interfaces
 {
@@ -21,6 +22,9 @@ namespace Subasta.Aplication.Services.Interfaces
 
         Task ToggleEstadoAsync(int id);
 
-        Task RegistrarPuja(int idSubasta, int idUsuario, decimal monto);
+        Task<List<int>> CerrarSubastasVencidasAsync();
+        Task CerrarSubastaAsync(int idSubasta);
+
+        Task<ResultadoSubasta?> ObtenerResultadoAsync(int idSubasta);
     }
 }

@@ -43,7 +43,7 @@ namespace Subasta.Infraestructure.Repository.Implementations
         .Include(s => s.Puja)
         .Include(s => s.IdObjetoNavigation)
         .ThenInclude(o => o.ImagenObjeto)
-        .Include(s => s.IdEstadoSubastaNavigation)
+         .Include(s => s.IdEstadoSubastaNavigation)
         .AsNoTracking()
         .ToListAsync();
         }
@@ -58,14 +58,13 @@ namespace Subasta.Infraestructure.Repository.Implementations
 
         public async Task UpdateAsync(Subastaa entity)
         {
-            // entity DEBE venir trackeado
-            // Igual se reestablece
+           
             if (_context.Entry(entity).State == EntityState.Detached)
             {
                 _context.Attach(entity);
             }
 
-            // Si el mapping ya actualizó propiedades escalares, esto garantiza update
+
             _context.Entry(entity).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
@@ -83,11 +82,6 @@ namespace Subasta.Infraestructure.Repository.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task<int> RegistrarPujaAsync(Puja entity)
-        {
-            await _context.Set<Puja>().AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity.IdPuja;
-        }
+      
     }
 }

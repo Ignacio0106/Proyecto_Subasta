@@ -33,5 +33,24 @@ namespace Subasta.Infraestructure.Repository.Implementations
             return collection;
         }
 
+        public async Task<int> AddAsync(ResultadoSubasta entity)
+        {
+            await _context.Set<ResultadoSubasta>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity.IdResultado;
+        }
+
+        
+
+        public async Task<ResultadoSubasta?> FindBySubastaIdAsync(int idSubasta)
+        {
+            return await _context.ResultadoSubasta
+                .Include(r => r.IdUsuarioGanadorNavigation)
+                .FirstOrDefaultAsync(r => r.IdSubasta == idSubasta);
+
+        }
+
+
+
     }
 }

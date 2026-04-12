@@ -33,5 +33,18 @@ namespace Subasta.Infraestructure.Repository.Implementations
             return collection;
         }
 
+        public async Task<int> AddAsync(Pago entity)
+        {
+            await _context.Set<Pago>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity.IdPago;
+        }
+
+        public async Task UpdateAsync(Pago pago)
+        {
+            _context.Pago.Update(pago);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
