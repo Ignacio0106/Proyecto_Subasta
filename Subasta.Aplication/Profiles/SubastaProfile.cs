@@ -33,6 +33,7 @@ namespace Subasta.Aplication.Profiles
             .ToList()))
     .ForMember(d => d.Condicion,
         opt => opt.MapFrom(src => src.IdObjetoNavigation.IdCondicionNavigation.Descripcion));
+    //.ForMember(o => o.IdObjetoNavigation.IdUsuarioNavigation);
 
             // DTO → ENTIDAD (crear / editar)
             CreateMap<SubastaDTO, Subastaa>()

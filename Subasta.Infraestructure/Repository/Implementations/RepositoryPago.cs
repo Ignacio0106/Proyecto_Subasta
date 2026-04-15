@@ -19,9 +19,11 @@ namespace Subasta.Infraestructure.Repository.Implementations
             _context = context;
         }
 
-        public Task<Pago> FindByIdAsync(int id)
+        public async Task<Pago> FindByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var @object = await _context.Set<Pago>().FindAsync(id);
+
+            return @object!;
         }
 
         public async Task<ICollection<Pago>> ListAsync()
@@ -32,7 +34,7 @@ namespace Subasta.Infraestructure.Repository.Implementations
 
             return collection;
         }
-
+        
         public async Task<int> AddAsync(Pago entity)
         {
             await _context.Set<Pago>().AddAsync(entity);
@@ -42,9 +44,15 @@ namespace Subasta.Infraestructure.Repository.Implementations
 
         public async Task UpdateAsync(Pago pago)
         {
-            _context.Pago.Update(pago);
             await _context.SaveChangesAsync();
         }
-
+        public async Task<Pago> FindBySubastaAsync(int id)
+        {
+            var pago = await _context
+                             .Set<Pago>()
+                             .Include(p => p.IdEstadoPagoNavigation)
+                             .FirstOrDefaultAsync(p => p.IdSubasta == id);
+            return pago;
+        }
     }
 }

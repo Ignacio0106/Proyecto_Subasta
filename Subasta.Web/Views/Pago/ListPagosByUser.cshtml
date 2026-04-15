@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Subasta.Aplication.DTOs.PagoDTO>
+
+@{
+    ViewData["Title"] = "Mis Pagos";
+}
+
+<div class="container py-5">
+
+    <h2 class="fw-bold text-center mb-4">
+        <i class="bi bi-credit-card text-primary"></i>
+        Mis Pagos
+    </h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center fw-semibold">
+            No tienes pagos pendientes.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle shadow-sm rounded-3 overflow-hidden">
+
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Subasta</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody class="text-center">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    #@item.IdSubasta
+                                </span>
+                            </td>
+
+                            <td class="fw-bold text-success">
+                                ₡@item.Monto.ToString("N2")
+                            </td>
+
+                            <td>
+                                @item.FechaPago
+                            </td>
+
+                            <td>
+                                @if (item.IdEstadoPago == 1)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Pendiente
+                                    </span>
+                                }
+                                else if (item.IdEstadoPago == 2)
+                                {
+                                    <span class="badge bg-success">
+                                        Pagado
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (item.IdEstadoPago == 1)
+                                {
+                                    <a asp-controller="Pago"
+                                       asp-action="RegistrarPago"
+                                       asp-route-id="@item.IdSubasta"
+                                       class="btn btn-primary btn-sm rounded-3 shadow-sm">
+                                        <i class="bi bi-cash-coin"></i> Pagar
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Completado</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
+</div>

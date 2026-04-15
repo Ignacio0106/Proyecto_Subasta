@@ -4,35 +4,56 @@
 }
 
 <div class="container py-5">
+
     <!-- HEADER -->
     <div class="text-center mb-5">
         <h1 class="fw-bold display-5 mb-2">
             <i class="bi bi-hammer text-primary"></i>
             Subasta #@Model.IdSubasta
         </h1>
-        <p id="estadoSubasta" class="text-muted fs-6">Participá en esta emocionante subasta</p>
+        <p id="estadoSubasta" class="text-muted fs-6">
+            Participá en esta emocionante subasta
+        </p>
     </div>
-    
-    <div class="row justify-content-center align-items-stretch g-4">
-        <!-- IZQUIERDA: VENDEDOR -->
+    <div id="ganadorAnuncio" class="alert alert-success text-center d-none mt-3"></div>
+    <div class="row g-4">
+
+        <!-- IZQUIERDA -->
         <div class="col-lg-3">
             <div class="card h-100 shadow-sm border-0 rounded-4 p-4">
-                <h6 class="fw-bold text-secondary mb-3 text-uppercase">
-                    <i class="bi bi-person-fill me-2 text-primary"></i>Vendedor
+
+                <!-- VENDEDOR SUBASTA -->
+                <h6 class="fw-bold text-secondary text-uppercase mb-3">
+                    <i class="bi bi-person-fill me-2 text-primary"></i>
+                    Vendedor de la subasta
                 </h6>
-                <div class="bg-light p-4 rounded-3">
-                    <p class="fw-bold mb-1 fs-6">@Model.IdUsuarioCreadorNavigation.NombreCompleto</p>
-                    <p class="text-muted mb-0 small">
+                <div class="bg-light p-3 rounded-3 mb-4">
+                    <p class="fw-bold mb-1">@Model.IdUsuarioCreadorNavigation.NombreCompleto</p>
+                    <p class="text-muted small mb-0">
                         <i class="bi bi-envelope me-1"></i>
                         @Model.IdUsuarioCreadorNavigation.CorreoElectronico
                     </p>
                 </div>
+
+                <!-- VENDEDOR OBJETO -->
+                <h6 class="fw-bold text-secondary text-uppercase mb-3">
+                    <i class="bi bi-person-badge me-2 text-primary"></i>
+                    Vendedor del objeto
+                </h6>
+                <div class="bg-light p-3 rounded-3">
+                    <p class="fw-bold mb-1">@Model.IdObjetoNavigation.IdUsuarioNavigation.NombreCompleto</p>
+                    <p class="text-muted small mb-0">
+                        @Model.IdObjetoNavigation.IdUsuarioNavigation.CorreoElectronico
+                    </p>
+                </div>
+
             </div>
         </div>
 
-        <!-- CENTRO: PRODUCTO -->
-        <div class="col-lg-5">
+        <!-- CENTRO -->
+        <div class="col-lg-6">
             <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+
                 <!-- CARRUSEL -->
                 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
@@ -41,11 +62,11 @@
                             <div class="carousel-item @(i == 0 ? "active" : "")">
                                 <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Imagenes[i])"
                                      class="d-block w-100"
-                                     style="height: 400px; object-fit: cover;"
-                                     alt="Imagen del producto">
+                                     style="height: 400px; object-fit: cover;">
                             </div>
                         }
                     </div>
+
                     @if (Model.Imagenes.Count > 1)
                     {
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -57,128 +78,126 @@
                     }
                 </div>
 
-                <!-- INFO DEL PRODUCTO -->
+                <!-- INFO -->
                 <div class="card-body p-4">
-                    <h2 class="fw-bold mb-2">@Model.IdObjetoNavigation.Nombre</h2>
+                    <h2 class="fw-bold mb-3">@Model.IdObjetoNavigation.Nombre</h2>
+
+                    <!-- DESCRIPCIÓN -->
                     <div class="bg-light p-3 rounded-3 mb-4">
-                        <p class="mb-0 text-secondary">@Model.IdObjetoNavigation.Descripcion</p>
+                        <h6 class="fw-bold text-secondary">Descripción</h6>
+                        <p class="mb-0 text-muted">
+                            @Model.IdObjetoNavigation.Descripcion
+                        </p>
                     </div>
 
                     <!-- CONTADOR -->
-                    <div class="alert alert-warning d-flex align-items-center gap-2 mb-0">
-                        <i class="bi bi-hourglass-split fs-5"></i>
+                    <div class="alert alert-warning d-flex align-items-center gap-3 mb-0">
+                        <i class="bi bi-hourglass-split fs-4"></i>
                         <div>
-                            <small class="d-block text-muted">Tiempo restante</small>
-                            <div id="contador" class="fs-5 fw-bold"></div>
+                            <small class="text-muted">Tiempo restante</small>
+                            <div id="contador" class="fw-bold fs-5"></div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
-        <!-- DERECHA: PANEL DE PUJAS -->
+        <!-- DERECHA -->
         <div class="col-lg-3">
             <div class="card h-100 shadow-sm border-0 rounded-4 p-4">
-                <h5 class="fw-bold mb-4 text-success">
-                    <i class="bi bi-cash-coin me-2"></i>Información de Pujas
+
+                <h5 class="fw-bold text-success mb-4">
+                    <i class="bi bi-cash-coin me-2"></i>
+                    Información de Pujas
                 </h5>
 
                 <ul class="list-group list-group-flush mb-4">
-                    <li class="list-group-item d-flex justify-content-between px-0 py-3 border-bottom">
+
+                    <li class="list-group-item d-flex justify-content-between px-0">
                         <span class="text-muted">Precio Base</span>
                         <strong>₡@Model.PrecioBase.ToString("N0")</strong>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between px-0 py-3 border-bottom">
-                        <span class="text-muted">Incremento Mínimo</span>
+
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span class="text-muted">Incremento</span>
                         <strong>₡@Model.IncrementoMinimo.ToString("N0")</strong>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between px-0 py-3 border-bottom">
+
+                    <li class="list-group-item d-flex justify-content-between px-0">
                         <span class="text-muted">Puja Actual</span>
                         <strong class="text-success fs-5">
-                            ₡<span id="pujaActual">@(Model.Pujas.Any() ? Model.Pujas.Max(p => p.MontoOfertado).ToString("N0") : "0")</span>
+                            <span id="pujaActual">
+                                @(Model.Pujas.Any() ? Model.Pujas.Max(p => p.MontoOfertado).ToString("N0") : "0")
+                            </span>
                         </strong>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between px-0 py-3">
-                        <span class="text-muted">Líder actual</span>
-                        <strong id="usuarioLider" class="text-primary">
-                            @(Model.Pujas.Any() ? Model.Pujas.OrderByDescending(p => p.MontoOfertado).First().NombreUsuario : "-")
-                        </strong>
-                    </li>
+
                 </ul>
-
-                <!-- ALERTA PUJA SUPERADA -->
-                <div id="alertaSuperada" class="alert alert-danger d-none mb-3" role="alert">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
-                    ⚠️ ¡Tu puja ha sido superada!
-                </div>
-
-                <!-- ANUNCIO GANADOR -->
-                <!-- ANUNCIO GANADOR -->
-               
-                @if (ViewBag.Resultado != null)
-                {
-                    <div class="alert alert-success mb-3">
-                        🏆 <strong>Ganador:</strong> @ViewBag.Resultado.NombreUsuario <br />
-                        💰 <strong>Monto final:</strong> ₡@ViewBag.Resultado.MontoFinal
-                    </div>
-                }
-                else
-                {
-                    <div id="ganadorAnuncio" class="alert alert-success d-none mb-3" role="alert">
-                    </div>
-                }
 
                 <!-- FORMULARIO -->
                 <div id="seccionPuja">
-                    <label class="form-label fw-bold small text-uppercase">Tu Puja</label>
+                    <label class="form-label fw-bold small text-uppercase">
+                        Tu Puja
+                    </label>
+
                     <div class="input-group mb-2">
-                        <span class="input-group-text bg-success text-white fw-bold">₡</span>
+                        <span class="input-group-text bg-success text-white">₡</span>
                         <input type="number"
                                id="montoPuja"
                                class="form-control form-control-lg"
-                               placeholder="Ingresa tu oferta..."
-                               min="@(Model.PrecioBase + Model.IncrementoMinimo)"
-                               step="@Model.IncrementoMinimo" />
+                               placeholder="Ingresa tu oferta..." />
                     </div>
-                    <small class="text-muted d-block mb-3">
-                        Mínimo: ₡@((Model.PrecioBase + Model.IncrementoMinimo).ToString("N0"))
-                    </small>
-                    <button id="btnPujar" class="btn btn-success btn-lg w-100 fw-bold">
+
+                    <button id="btnPujar" class="btn btn-success w-100 fw-bold">
                         <i class="bi bi-hammer me-2"></i>Pujar Ahora
                     </button>
                 </div>
+
             </div>
         </div>
+
     </div>
 
-    <!-- HISTORIAL DE PUJAS -->
+    <!-- HISTORIAL -->
     <div class="card mt-5 shadow-sm border-0 rounded-4">
-        <div class="card-header bg-light border-0 rounded-top-4 p-4">
+        <div class="card-header bg-light p-4">
             <h5 class="fw-bold mb-0">
-                <i class="bi bi-clock-history text-primary me-2"></i>Historial de Pujas
+                <i class="bi bi-clock-history text-primary me-2"></i>
+                Historial de Pujas
             </h5>
         </div>
+
         <div class="card-body p-4">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Monto</th>
-                            <th>Fecha y Hora</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaHistorial"></tbody>
-                </table>
-            </div>
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Monto</th>
+                        <th>Fecha y Hora</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaHistorial"></tbody>
+            </table>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
 
     <script>
+            // let pujaActualInicial = 
+            /*@@(Model.Pujas.Any()*/
+            // ? Model.Pujas.Max(p => p.MontoOfertado).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)
+            // : "0");
+
+    //             document.addEventListener("DOMContentLoaded", () => {
+    //     document.getElementById("pujaActual").innerText =
+    //         parseFloat(pujaActualInicial).toLocaleString();
+    // });
         const idSubasta = @Model.IdSubasta;
 
         const precioBase = @Model.PrecioBase.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
@@ -223,42 +242,101 @@
             connection.invoke("UnirseSubasta", idSubasta.toString());
 
             connection.invoke("ObtenerHistorial", idSubasta);
+
         });
+        // --- Variables de rastreo en la parte superior ---
+        let usuarioLiderActual = ""; // Para saber quién tiene la puja más alta en este momento
+        let miUsuario = "@User.Identity.Name";
 
         connection.on("NuevaPuja", function (data) {
-            document.getElementById("pujaActual").innerText =
-                parseFloat(data.montoLider).toLocaleString();
-
-            document.getElementById("usuarioLider").innerText =
-                data.usuarioLider;
-
-            actualizarHistorial(data.historial);
-
-            if (miUltimaPuja > 0 && data.montoLider > miUltimaPuja) {
-                document.getElementById("alertaSuperada").classList.remove("d-none");
-                setTimeout(() =>
-                    document.getElementById("alertaSuperada").classList.add("d-none"), 5000);
+            const montoNuevo = parseFloat(data.montoLider);
+            const nuevoUsuarioLider = data.usuarioLider;
+            console.log("Entra: ", usuarioLiderActual + "Otro" + miUsuario + "Lider " + nuevoUsuarioLider);
+            // 1. NOTIFICACIÓN: SI YO ERA EL LÍDER Y OTRO ME SUPERÓ
+            if (usuarioLiderActual === miUsuario && nuevoUsuarioLider !== miUsuario) {
+                console.log("Entra 2: ", usuarioLiderActual + "Otro" + miUsuario);
+                Swal.fire({
+                    icon: 'warning',
+                    title: '¡Puja superada!',
+                    text: 'Alguien ha superado tu oferta. ¡Puja de nuevo para recuperar el liderazgo!',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 5000,
+                    timerProgressBar: true
+                });
             }
+
+            // 2. NOTIFICACIÓN: SI YO SOY EL QUE ACABA DE PUJAR (Confirmación)
+            if (nuevoUsuarioLider === miUsuario) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Puja realizada',
+                    text: 'Tu oferta se ha registrado con éxito y eres el líder actual.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+            // 3. NOTIFICACIÓN: NUEVA PUJA DE TERCEROS
+            else if (usuarioLiderActual !== miUsuario) {
+                // Solo mostrar "Nueva puja" si no me acaban de superar (para no saturar)
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Nueva puja',
+                    text: `${nuevoUsuarioLider} ofertó ₡${montoNuevo.toLocaleString()}`,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2500
+                });
+            }
+
+            // Actualizar estados globales y UI
+            usuarioLiderActual = nuevoUsuarioLider;
+            document.getElementById("pujaActual").innerText = montoNuevo.toLocaleString();
+            actualizarHistorial(data.historial);
         });
 
-                connection.on("PujaSuperada", function (mensaje) {
-            alert(mensaje);
+        connection.on("PujaSuperada", function (mensaje) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Puja superada',
+                text: mensaje,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
         });
 
-                connection.on("SubastaFinalizada", function () {
-            alert("La subasta ha finalizado");
-            location.reload();
+        connection.on("SubastaFinalizada", function () {
+            document.getElementById("estadoSubasta").innerText = "Subasta Finalizada";
+            document.getElementById("seccionPuja").style.display = "none";
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Subasta finalizada',
+                text: 'La subasta ha terminado.',
+                confirmButtonText: 'Entendido'
+            });
+
         });
+
         connection.on("SubastaCerrada", function (data) {
             document.getElementById("estadoSubasta").innerText = "Subasta Finalizada";
             document.getElementById("seccionPuja").style.display = "none";
 
-            const ganador = document.getElementById("ganadorAnuncio");
-            ganador.classList.remove("d-none");
-
-            ganador.innerHTML = data.hayGanador
-                ? `🏆 <strong>Ganador: ${data.ganador}</strong> con ₡${parseFloat(data.montoFinal).toLocaleString()}`
-                : "Esta subasta finalizó sin ofertas.";
+            Swal.fire({
+                icon: data?.hayGanador ? 'success' : 'info',
+                title: data?.hayGanador ? 'Subasta finalizada 🏆' : 'Subasta finalizada',
+                html: data?.hayGanador
+                    ? `<b>${data.ganador}</b> ganó con ₡${parseFloat(data.montoFinal).toLocaleString()}`
+                    : 'La subasta ha terminado.',
+                confirmButtonText: 'Entendido'
+            });
         });
 
                 connection.on("HistorialInicial", function (pujas) {
@@ -266,8 +344,9 @@
         });
 
         // ── HISTORIAL (FUNCION SEGURA) ─────────────────────────
-        function actualizarHistorial(pujas) {
+                function actualizarHistorial(pujas) {
             const tbody = document.getElementById("tablaHistorial");
+            const pujaActualElem = document.getElementById("pujaActual");
 
             if (!tbody) return;
 
@@ -278,21 +357,41 @@
                             No hay pujas aún
                         </td>
                     </tr>`;
+
+                if (pujaActualElem) {
+                    pujaActualElem.textContent = "₡0";
+                }   
+
                 return;
             }
 
             tbody.innerHTML = "";
 
+            let pujaMasAlta = 0;
+
             pujas.forEach(p => {
                 const fecha = new Date(p.fechaHora).toLocaleString("es-CR");
+                const monto = parseFloat(p.montoOfertado);
+
+                // Detectar la puja más alta
+                if (monto > pujaMasAlta) {
+                    pujaMasAlta = monto;
+                }
 
                 tbody.innerHTML += `
                     <tr>
                         <td><strong>${p.nombreUsuario}</strong></td>
-                        <td class="fw-bold text-success">₡${parseFloat(p.montoOfertado).toLocaleString()}</td>
+                        <td class="fw-bold text-success">₡${monto.toLocaleString()}</td>
                         <td class="text-muted small">${fecha}</td>
                     </tr>`;
             });
+
+            // 🔥 Actualizar la puja actual en la UI
+            if (pujaActualElem) {
+                pujaActualElem.textContent = `₡${pujaMasAlta.toLocaleString()}`;
+            }
+
+             miUltimaPuja = pujaMasAlta;
         }
 
         // ── BOTÓN PUJAR ───────────────────────────────────────
@@ -300,10 +399,18 @@
 
             const monto = parseFloat(document.getElementById("montoPuja").value);
 
-            if (!monto || monto < (precioBase + incremento)) {
-                alert(`La puja mínima es ₡${(precioBase + incremento).toLocaleString()}`);
-                return;
-            }
+                    const pujaActual = parseFloat(
+            document.getElementById("pujaActual").innerText.replace(/,/g, "")
+        );
+
+        if (!monto || monto < (pujaActual + incremento)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Puja inválida',
+                text: `Debes ofertar al menos ₡${(pujaActual + incremento).toLocaleString()}`
+            });
+            return;
+        }
 
             const btn = document.getElementById("btnPujar");
             btn.disabled = true;
@@ -322,11 +429,18 @@
                     miUltimaPuja = monto;
                     document.getElementById("montoPuja").value = "";
                 } else {
-                    alert(result.mensaje);
+                            Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: result.mensaje
+        });
                 }
-
             } catch (err) {
-                alert("Error de conexión: " + err.message);
+                        Swal.fire({
+            icon: 'error',
+            title: 'Error de conexión',
+            text: err.message
+        });
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="bi bi-hammer me-2"></i>Pujar Ahora';

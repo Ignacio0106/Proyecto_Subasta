@@ -11,5 +11,8 @@ namespace Subasta.Aplication.Services.Interfaces
     {
         Task<ICollection<PagoDTO>> ListAsync();
         Task<PagoDTO?> FindByIdAsync(int id);
+        Task<ICollection<PagoDTO>> ListPagosByUserAsync(int id);
+        Task RegistrarPagoAsync(PagoDTO dto, int idUsuario);
+        Task<PagoDTO?> FindBySubastaAsync(int id);
     }
 }

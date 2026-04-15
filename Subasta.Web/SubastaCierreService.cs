@@ -22,10 +22,21 @@ namespace Subasta.Web
                 using var scope = _scopeFactory.CreateScope();
                 var serviceSubasta = scope.ServiceProvider.GetRequiredService<IServiceSubasta>();
 
-                await serviceSubasta.CerrarSubastasVencidasAsync(); // método que debes crear
+                var idsCerradas = await serviceSubasta.CerrarSubastasVencidasAsync();
 
-                // Notificar por SignalR a cada subasta cerrada
-                // (el service puede retornar la lista de IDs cerrados)
+                foreach (var idSubasta in idsCerradas)
+                {
+                    var resultado = await serviceSubasta.ObtenerResultadoAsync(idSubasta);
+
+                    await _hubContext.Clients
+                        .Group($"Subasta-{idSubasta}")
+                        .SendAsync("SubastaCerrada", new
+                        {
+                            hayGanador = resultado != null && resultado.IdUsuarioGanador > 0,
+                            ganador = resultado?.IdUsuarioGanadorNavigation?.NombreCompleto ?? string.Empty,
+                            montoFinal = resultado?.MontoFinal ?? 0
+                        }, stoppingToken);
+                }
 
                 await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken); // revisa cada 15 seg
             }

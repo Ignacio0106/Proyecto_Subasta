@@ -6,6 +6,7 @@ using Subasta.Aplication.Services.Interfaces;
 using Subasta.Infraestructure.Models;
 using Subasta.Web.Helpers;
 using Subasta.Web.Hubs;
+using System.Security.Claims;
 
 namespace Subasta.Web.Controllers
 {
@@ -30,12 +31,12 @@ namespace Subasta.Web.Controllers
         }
 
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> RegistrarPuja(int idSubasta, decimal monto)
         {
             try
             {
-                var (exito, mensaje) = await _servicePuja.RegistrarPujaAsync(idSubasta, monto, UsuarioActualId);
+                var usuario = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var (exito, mensaje) = await _servicePuja.RegistrarPujaAsync(idSubasta, monto, usuario);
 
                 if (!exito)
                     return Json(new { exito = false, mensaje });

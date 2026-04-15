@@ -8,15 +8,15 @@ namespace Subasta.Aplication.Profiles
     {
         public PagoProfile()
         {
+            CreateMap<EstadoPago, EstadoPagoDTO>();
             // ENTIDAD → DTO
             CreateMap<Pago, PagoDTO>()
-                .ForMember(d => d.EstadoPago,
-                    o => o.MapFrom(s => s.IdEstadoPagoNavigation.Descripcion));
+            .ForMember(d => d.IdEstadoPagoNavigation, o => o.MapFrom(s => s.IdEstadoPagoNavigation));
 
             // DTO → ENTIDAD
             CreateMap<PagoDTO, Pago>()
-                .ForMember(d => d.IdEstadoPagoNavigation, o => o.Ignore())
-                .ForMember(d => d.IdSubastaNavigation, o => o.Ignore());
+            .ForMember(d => d.IdEstadoPagoNavigation, o => o.Ignore())
+            .ForMember(d => d.IdPago, o => o.Ignore());
         }
     }
 }

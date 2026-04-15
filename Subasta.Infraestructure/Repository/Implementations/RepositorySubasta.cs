@@ -27,6 +27,8 @@ namespace Subasta.Infraestructure.Repository.Implementations
                 .Include(s => s.IdObjetoNavigation)
                     .ThenInclude(o => o.IdCategoria)
                 .Include(s => s.IdObjetoNavigation)
+                    .ThenInclude(o => o.IdUsuarioVendedorNavigation)
+                .Include(s => s.IdObjetoNavigation)
                     .ThenInclude(o => o.ImagenObjeto)
                 .Include(s => s.IdUsuarioCreadorNavigation)
                 .Include(s => s.IdEstadoSubastaNavigation)

@@ -315,7 +315,7 @@ namespace Subasta.Web.Controllers
                         .SendAsync("PujaSuperada", "Tu puja ha sido superada");
                 }
 
-              
+
                 await _hubContext.Clients.Group($"Subasta-{idSubasta}")
                     .SendAsync("NuevaPuja", new
                     {

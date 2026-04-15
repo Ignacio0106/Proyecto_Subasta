@@ -51,6 +51,6 @@ namespace Subasta.Aplication.DTOs
 
         public List<PujaDTO> Pujas { get; set; } = new List<PujaDTO>();
 
-        //public PujaDTO? PujaActual { get; set; }
+        //public decimal PujaActual => Pujas.Any() ? Pujas.Max(p => p.MontoOfertado) : 0;
     }
 }

@@ -1,0 +1,150 @@
+﻿@model Subasta.Aplication.DTOs.PagoDTO
+
+@{
+    ViewData["Title"] = "Registrar Pago";
+}
+@if (Model == null)
+{
+    <div class="alert alert-warning text-center fw-semibold">
+        No existe un pago registrado para esta subasta.
+    </div>
+}
+else
+{
+    <div class="container py-5">
+
+        <div class="row justify-content-center">
+            <div class="col-md-1''">
+
+                <div class="card shadow-lg border-0 rounded-4">
+
+                    <!-- Header -->
+                    <div class="card-header bg-primary text-white text-center rounded-top-4">
+                        <h4 class="mb-0 fw-semibold">
+                            <i class="bi bi-credit-card me-2"></i>
+                            Registrar Pago
+                        </h4>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="card-body p-4">
+
+                        <form asp-action="RegistrarPago">
+                            <input asp-for="IdPago" type="hidden" />
+                            <input asp-for="IdSubasta" type="hidden" />
+
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                            <div class="row">
+
+                                <!-- 🔵 IZQUIERDA: Info del pago -->
+                                <div class="col-md-6">
+
+                                    <h5 class="fw-bold mb-3 text-primary">
+                                        <i class="bi bi-receipt"></i> Detalle del Pago
+                                    </h5>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">ID Pago</label>
+                                        <input value="@Model.IdPago" class="form-control" readonly />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label asp-for="Monto" class="form-label fw-semibold"></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₡</span>
+                                            <input asp-for="Monto" class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label asp-for="FechaPago" class="form-label fw-semibold"></label>
+                                        <input asp-for="FechaPago" type="datetime-local" class="form-control" readonly />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label asp-for="IdEstadoPago" class="form-label fw-semibold"></label>
+                                        <input value="@Model.IdEstadoPagoNavigation?.Descripcion"
+                                               class="form-control text-warning fw-semibold"
+                                               readonly />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Ganador</label>
+                                        <input value="@Model.NombreUsuarioGanador"
+                                               class="form-control text-success fw-semibold"
+                                               readonly />
+                                    </div>
+
+                                </div>
+
+                                <!-- 🟢 DERECHA: Tarjeta -->
+                                <div class="col-md-6">
+
+                                    <h5 class="fw-bold mb-3 text-primary">
+                                        <i class="bi bi-credit-card-2-front"></i> Pago con Tarjeta
+                                    </h5>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Número de tarjeta</label>
+                                        <input type="text" class="form-control shadow-sm"
+                                               placeholder="1234 5678 9012 3456" maxlength="19" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">Nombre del titular</label>
+                                        <input type="text" class="form-control shadow-sm"
+                                               placeholder="Nombre como aparece en la tarjeta" />
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label fw-semibold">Expiración</label>
+                                            <input type="text" class="form-control shadow-sm"
+                                                   placeholder="MM/AA" maxlength="5" />
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label fw-semibold">CVV</label>
+                                            <input type="password" class="form-control shadow-sm"
+                                                   placeholder="123" maxlength="3" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BOTÓN -->
+                            <div class="d-grid mt-4">
+                                <button type="submit"
+                                        class="btn btn-success btn-lg rounded-3 shadow-sm"
+                                        @(Model.IdEstadoPago == 2 ? "disabled" : "")>
+                                    <i class="bi bi-check-circle me-2"></i>
+                                    Registrar Pago
+                                </button>
+                            </div>
+
+                            @if (Model.IdEstadoPago == 2)
+                            {
+                                <div class="alert alert-success text-center fw-semibold mt-3">
+                                    Este pago ya fue confirmado.
+                                </div>
+                            }
+
+                        </form>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="card-footer text-center bg-light rounded-bottom-4">
+                        <a asp-controller="Pago" asp-action="ListPagosByUser" class="text-decoration-none fw-semibold">
+                            <i class="bi bi-arrow-left"></i> Volver
+                        </a>    
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+}

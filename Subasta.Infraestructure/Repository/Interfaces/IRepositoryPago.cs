@@ -13,5 +13,7 @@ namespace Subasta.Infraestructure.Repository.Interfaces
         Task<ICollection<Pago>> ListAsync();
         Task<Pago> FindByIdAsync(int id);
         Task<int> AddAsync(Pago entity);
+        Task UpdateAsync(Pago pago);
+        Task<Pago> FindBySubastaAsync(int id);
     }
 }

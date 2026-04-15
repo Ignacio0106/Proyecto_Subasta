@@ -173,34 +173,40 @@ namespace Subasta.Aplication.Services.Implementations
 
             foreach (var subasta in vencidas)
             {
-           
-                subasta.IdEstadoSubasta = 2; 
-                await _repository.UpdateEstadoAsync(subasta);
-
-           
                 var pujaGanadora = await _repositoryPuja.GetPujaMaximaEntidadAsync(subasta.IdSubasta);
 
-               
+                subasta.IdEstadoSubasta = pujaGanadora == null ? 5 : 2;
+                await _repository.UpdateEstadoAsync(subasta);
+
+
                 var resultado = new ResultadoSubasta
                 {
                     IdSubasta = subasta.IdSubasta,
-                    IdUsuarioGanador = pujaGanadora?.IdUsuario ?? 0, 
+                    IdUsuarioGanador = pujaGanadora?.IdUsuario ?? 0,
                     MontoFinal = pujaGanadora?.MontoOfertado ?? 0,
-                    FechaCierre = DateTime.Now
+                    FechaCierre = pujaGanadora?.FechaHora ?? DateTime.Now
                 };
-                await _repositoryResultado.AddAsync(resultado);
+                var resultadoExistente = await _repositoryResultado.FindBySubastaIdAsync(subasta.IdSubasta);
+                if (resultadoExistente == null)
+                {
+                    await _repositoryResultado.AddAsync(resultado);
+                }
 
-     
+
                 if (pujaGanadora != null)
                 {
-                    var pago = new Pago
+                    var pagoExistente = await _repositoryPago.FindBySubastaAsync(subasta.IdSubasta);
+                    if (pagoExistente == null)
                     {
-                        IdSubasta = subasta.IdSubasta,
-                        Monto = pujaGanadora.MontoOfertado,
-                        FechaPago = DateTime.Now,   
-                        IdEstadoPago = 1           
-                    };
-                    await _repositoryPago.AddAsync(pago);
+                        var pago = new Pago
+                        {
+                            IdSubasta = subasta.IdSubasta,
+                            Monto = pujaGanadora.MontoOfertado,
+                            FechaPago = pujaGanadora.FechaHora,
+                            IdEstadoPago = 1
+                        };
+                        await _repositoryPago.AddAsync(pago);
+                    }
                 }
 
                 idsCerradas.Add(subasta.IdSubasta);
@@ -216,12 +222,11 @@ namespace Subasta.Aplication.Services.Implementations
             if (subasta == null)
                 return;
 
-           
-            if (subasta.IdEstadoSubasta == 2)
+            if (subasta.IdEstadoSubasta == 2 || subasta.IdEstadoSubasta == 5)
                 return;
 
-         
-            subasta.IdEstadoSubasta = 2; 
+            var pujaGanadora = await _repositoryPuja.GetPujaMaximaEntidadAsync(idSubasta);
+            subasta.IdEstadoSubasta = pujaGanadora == null ? 5 : 2;
 
 
             await _repository.UpdateAsync(subasta);

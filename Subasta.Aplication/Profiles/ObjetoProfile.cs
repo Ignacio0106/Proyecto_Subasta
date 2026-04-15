@@ -8,6 +8,7 @@ namespace Subasta.Aplication.Profiles
     {
         public ObjetoProfile()
         {
+
             // ENTIDAD → DTO
             CreateMap<Objeto, ObjetoDTO>()
     .ForMember(d => d.Vendedor, o => o.MapFrom(s => s.IdUsuarioVendedorNavigation.NombreCompleto))
@@ -18,7 +19,8 @@ namespace Subasta.Aplication.Profiles
         .Select(i => i.Imagen)
         .FirstOrDefault()))
     .ForMember(d => d.Categorias, o => o.MapFrom(s => s.IdCategoria.Select(c => c.Nombre).ToList()))
-    .ForMember(d => d.HistorialSubastas, o => o.MapFrom(s => s.Subasta));
+    .ForMember(d => d.HistorialSubastas, o => o.MapFrom(s => s.Subasta))
+    .ForMember(d => d.IdUsuarioNavigation, o => o.MapFrom(s => s.IdUsuarioVendedorNavigation));
 
             // DTO → ENTIDAD (si algún día lo usas para crear)
             CreateMap<ObjetoDTO, Objeto>()

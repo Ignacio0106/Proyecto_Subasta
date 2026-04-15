@@ -35,6 +35,7 @@ namespace Subasta.Aplication.DTOs
         [DisplayName("Vendedor")]
         public string Vendedor { get; set; } = string.Empty;
         public int IdVendedor { get; set; }
+        public UsuarioDTO IdUsuarioNavigation { get; set; } = new();
 
         [DisplayName("Estado")]
         public string Estado { get; set; } = string.Empty;

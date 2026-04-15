@@ -148,6 +148,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<ObjetoProfile>();
     config.AddProfile<CategoriaProfile>();
     config.AddProfile<CondicionProfile>();
+    config.AddProfile<PagoProfile>();
 });
 
 //Seguridad
